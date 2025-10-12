@@ -1,4 +1,5 @@
 import sys
+import os
 
 def run():
     while(display()): pass
@@ -9,14 +10,22 @@ def display():
         print("".join(row))
 
 def menu():
-    file_name = input("Enter path of map (etc. maps/Sample.txt): ")
+    # Uncomment this if we want to not include dir and just type the filename
+    # file_name = "Maps/"" + input("Enter path of map (etc. Sample.txt): ")
+
+    # Code if we want to include the dir and map filename
+    file_name = input("Enter path of map (etc. Maps/Sample.txt): ")
     '''
     function intended for menu/map selection
     '''
     ...
-    if FileNotFoundError:
+    if not os.path.exists(file_name):
+        if os.name == "nt":
+            os.system("cls")
+        else:
+            os.system("clear")
         print("File not found, try again")
-        file_name = input("Enter path of map (etc. maps/Sample.txt): ")
+        file_name = input("Enter path of map (etc. Maps/Sample.txt): ")
     return open(file_name, "rt")
 
 def fetch_map(file = menu()):
