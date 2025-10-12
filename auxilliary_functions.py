@@ -1,0 +1,18 @@
+import os
+
+def instruct_input(input_text):
+    return input(input_text)
+def get_operating_system():
+    return os.name
+def check_existing_file(file_name):
+    return os.path.exists(file_name)
+def os_command(command):
+    return os.system(command)
+def error():
+    '''
+    If incorrectly running this file
+    will add later
+    '''
+    ...
+if __name__ == "__main__":
+    error()
