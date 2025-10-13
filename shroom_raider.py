@@ -23,11 +23,11 @@ def display(show_map):
     for row in show_map:
         print("".join(row))
     print("---------------------")
-    print("Check: Printed")
+    print("Check: Map Printed")
     return None
 
 def menu():
-    print("Check0")
+    print("Check: Menu Loaded")
     return instruct_input("Try Again (True or False): ")
 
 def choose_map():
@@ -45,7 +45,7 @@ def choose_map():
 
 def fetch_map():
     file = choose_map()
-    print("check1")
+    print("Check: Map Chosen")
     map = [list(row) for row in file.read().split("\n")]
     file.close()
     return map, len(map), len(map[0])
