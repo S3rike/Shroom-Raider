@@ -1,4 +1,4 @@
-from auxilliary_functions import *
+from auxiliary.functions import *
 
 # Main function
 def run():
@@ -32,8 +32,7 @@ def display(show_map):
     print("Check: Map & Controls Printed")
     return None
 
-# Gets input from user if they want to continue return to
-# menu for any invalid input
+# Gets input from user if they want to continue, loop for invalid input
 def menu():
     print("Check: Menu Loaded")
     choice = instruct_input("Play Again? (Y/N): ")
@@ -45,8 +44,10 @@ def menu():
     else:
         clear_screen_helper()
         return menu()
-    
+
+# Option A for choose_map() --- no limit
 # Get map file from user and open it
+'''
 def choose_map():
     clear_screen_helper()
     file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
@@ -58,24 +59,41 @@ def choose_map():
         file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
 
     return open(file_name, "rt")
-
-# Option when we want to limit the amount of tries for entering the map file
 '''
+# Option B for choose_map() -- there's a limit
+# Option when we want to limit the amount of tries for entering the map file
 def choose_map():
+    retries = 0
+    max_retries = 2
+    success = False
+
     clear_screen_helper()
     file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
-    ctr = 0
 
-    while not check_existing_file(file_name) and ctr < 2:
-        ctr += 1
-        if ctr == 3:
-            return exit_terminal()
+    # If file exists return it using open
+    if check_existing_file(file_name):
+        return open(file_name, 'rt')
+    
+    # Else, test it until it reaches three tries
+    else:
+        while retries < max_retries and not success:
+            try:
+                open(file_name, 'rt')
+                if check_existing_file(file_name):
+                    success = True
+                    
+            except FileNotFoundError:
+                retries += 1
+                clear_screen_helper()
+                print(f"File not found, try again. You have {3 - retries} tries left")
+                file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
+
+        if success:
+            return open(file_name, 'rt')
         else:
-            clear_screen_helper()
-            print(f"File not found, try again. You have {3 - ctr} tries left")
-            file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
-'''
-
+            print('Sorry, you have reached the limit. Please try again.')
+            exit_terminal()
+        
 # Return the map as a list
 def fetch_map():
     file = choose_map()
@@ -86,14 +104,14 @@ def fetch_map():
 
 # Get player position
 def player_pos(game_map, player_char):
-        for row_index, row_list in enumerate(game_map):
-            for col_index, cell_char in enumerate(row_list):
-                if cell_char == player_char:
-                    return (row_index, col_index)
+    for row_index, row_list in enumerate(game_map):
+        for col_index, cell_char in enumerate(row_list):
+            if cell_char == player_char:
+                return (row_index, col_index)
 
 # Update map depending on user input
 def play_game(game_map):
-    player_char = "R"
+    player_char = "L"
     player_row, player_col = player_pos(game_map, player_char)
     print(f"You are at ({player_row}, {player_col})\n")
     action = instruct_input("Enter your next action: ").upper()
@@ -121,7 +139,7 @@ def play_game(game_map):
     # going up from top loops around
     # going down from bottom crashes
     game_map[player_row][player_col] = "." # todo account for running over different tiles
-    game_map[new_row][new_col] = "R"
+    game_map[new_row][new_col] = "L"
 
     return game_map
 
