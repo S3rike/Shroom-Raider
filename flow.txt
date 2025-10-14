@@ -17,12 +17,9 @@ run()
   |_ _ display(current_map)
         |_ _ _ clear_screen_helper()
         |_ _ _ current_map = play_game(map)
-
-Continuing...
-play_game(map)
-   |
-   |_ _ player_pos(current_map, player_char)
-   |
-   |_ _ get input from user
-   |
-   |_ _ update map
+                                |
+                                |_ _ player_pos(current_map, player_char)
+                                |
+                                |_ _ get input from user
+                                |
+                                |_ _ update map
