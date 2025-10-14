@@ -1,28 +1,26 @@
 from auxilliary_functions import *
 
-def clear_screen_helper():
-    if get_operating_system() == "nt":
-        print("os clear")
-    else:
-        os_command("clear")
-
+# Main function
 def run():
+    clear_screen_helper()
     print("start")
-    while(True): 
+    while True: 
         game_status = menu()
+
         if not game_status: 
             break
         # setup
-        current_map, row, column = fetch_map()
+        current_map = fetch_map()
         game_over = False
 
         while not game_over:
             display(current_map)
             current_map = play_game(current_map)
 
-            # todo check for game over or in diff func
+        # todo check for game over or in diff func
     return None
 
+# Display the map from fetch_maps
 def display(show_map):
     clear_screen_helper()
     print("\n--- Current Map ---")
@@ -34,6 +32,8 @@ def display(show_map):
     print("Check: Map & Controls Printed")
     return None
 
+# Gets input from user if they want to continue return to
+# menu for any invalid input
 def menu():
     print("Check: Menu Loaded")
     choice = instruct_input("Play Again? (Y/N): ")
@@ -42,42 +42,67 @@ def menu():
         return True
     elif processed == 'N':
         return False
-    else: # todo add invalid check
-        pass
-
+    else:
+        clear_screen_helper()
+        return menu()
+    
+# Get map file from user and open it
 def choose_map():
+    clear_screen_helper()
     file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
 
-    if not check_existing_file(file_name):
-        if get_operating_system() == "nt":
-            print("os clear")
-        else:
-            os_command("clear")
+    # I think we should just limit the amount of tries they enter invalid inputs
+    while not check_existing_file(file_name):
+        clear_screen_helper()
         print("File not found, try again")
         file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
 
     return open(file_name, "rt")
 
+# Option when we want to limit the amount of tries for entering the map file
+'''
+def choose_map():
+    clear_screen_helper()
+    file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
+    ctr = 0
+
+    while not check_existing_file(file_name) and ctr < 2:
+        ctr += 1
+        if ctr == 3:
+            return exit_terminal()
+        else:
+            clear_screen_helper()
+            print(f"File not found, try again. You have {3 - ctr} tries left")
+            file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
+'''
+
+# Return the map as a list
 def fetch_map():
     file = choose_map()
     print("Check: Map Chosen")
     map = [list(row) for row in file.read().split("\n")]
     file.close()
-    return map, len(map), len(map[0])
-    
-def play_game(game_map):
-    def player_pos(game_map, player_char="R"):
+    return map
+
+# Get player position
+def player_pos(game_map, player_char):
         for row_index, row_list in enumerate(game_map):
             for col_index, cell_char in enumerate(row_list):
                 if cell_char == player_char:
                     return (row_index, col_index)
-        
 
-    player_row, player_col = player_pos(game_map)
+# Update map depending on user input
+def play_game(game_map):
+    player_char = "R"
+    player_row, player_col = player_pos(game_map, player_char)
     print(f"You are at ({player_row}, {player_col})\n")
     action = instruct_input("Enter your next action: ").upper()
+
+    # If we want to directly quit terminal we could call this function,
+    # however, if we want to load back to menu, we need to find a way to break
+    # out of the nested loops and get away with the data types
     if action == 'Q':
-        return None
+        exit_terminal()
 
     # todo deal with invalid actions, chained actions
     # according to sir jerome @ cs11 discord, only choose 1 between WASD or UDLR
