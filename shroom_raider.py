@@ -1,4 +1,4 @@
-from auxiliary.functions import *
+from auxilliary_functions import *
 
 # Main function
 def run():
