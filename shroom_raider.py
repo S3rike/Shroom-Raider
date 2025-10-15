@@ -14,8 +14,13 @@ def run():
         game_over = False
 
         while not game_over:
-            display(current_map)
-            current_map = play_game(current_map)
+            # If the player stepped into water the current_map returns None
+            if current_map == None:
+                print('\nGame over\n')
+                game_over = True
+            else:
+                display(current_map)
+                current_map = play_game(current_map)
 
         # todo check for game over or in diff func
     return None
@@ -60,7 +65,7 @@ def choose_map():
 
     return open(file_name, "rt")
 '''
-# Option B for choose_map() -- there's a limit
+# Option B for choose_map() --- there's a limit
 # Option when we want to limit the amount of tries for entering the map file
 def choose_map():
     retries = 0
@@ -68,7 +73,7 @@ def choose_map():
     success = False
 
     clear_screen_helper()
-    file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
+    file_name = instruct_input("Enter path of map (etc. maps/map1.txt): ")
 
     # If file exists return it using open
     if check_existing_file(file_name):
@@ -86,7 +91,7 @@ def choose_map():
                 retries += 1
                 clear_screen_helper()
                 print(f"File not found, try again. You have {3 - retries} tries left")
-                file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
+                file_name = instruct_input("Enter path of map (etc. maps/map1.txt): ")
 
         if success:
             return open(file_name, 'rt')
@@ -136,10 +141,17 @@ def play_game(game_map):
     else:
         print("Invalid action. Try again.")
         return game_map
-    # going up from top loops around
-    # going down from bottom crashes
-    game_map[player_row][player_col] = "." # todo account for running over different tiles
-    game_map[new_row][new_col] = "L"
+
+    # If the tile stepped into is water
+    if game_map[new_row][new_col] == '~':
+        return
+    # If the tile stepped into is a tree, return to current state
+    elif game_map[new_row][new_col] == 'T':
+        game_map[player_row][player_col]
+    # If the tile stepped into is empty, proceed
+    else:
+        game_map[player_row][player_col] = "." # todo account for running over different tiles
+        game_map[new_row][new_col] = "L"
 
     return game_map
 
