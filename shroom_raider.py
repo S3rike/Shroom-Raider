@@ -1,11 +1,13 @@
 from auxilliary_functions import *
+from assets.gameover import game_over_text
 
-# Main function that houses all the functions
+# Main function
 def run():
     clear_screen_helper()
     print("start")
     while True: 
         game_status = menu()
+        
 
         if not game_status: 
             break
@@ -16,7 +18,7 @@ def run():
         while not game_over:
             # If the player stepped into water the current_map returns None
             if current_map == None:
-                print('\nGame over\n')
+                show_game_over()
                 game_over = True
             else:
                 display(current_map)
@@ -28,7 +30,7 @@ def run():
 # Display the map from fetch_maps
 def display(show_map):
     clear_screen_helper()
-    print("\n--- Current Map ---")
+    print("\n--- Current Map ---\n")
     for row in show_map:
         print("".join(row))
     print("---------------------")
@@ -73,7 +75,7 @@ def choose_map():
     success = False
 
     clear_screen_helper()
-    file_name = instruct_input("Enter path of map (etc. maps/map1.txt): ")
+    file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
 
     # If file exists return it using open
     if check_existing_file(file_name):
@@ -91,7 +93,7 @@ def choose_map():
                 retries += 1
                 clear_screen_helper()
                 print(f"File not found, try again. You have {3 - retries} tries left")
-                file_name = instruct_input("Enter path of map (etc. maps/map1.txt): ")
+                file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
 
         if success:
             return open(file_name, 'rt')
@@ -154,6 +156,16 @@ def play_game(game_map):
         game_map[new_row][new_col] = "L"
 
     return game_map
+
+# Show game over screen
+def show_game_over():
+    column = get_terminal_col_size()
+    clear_screen_helper()
+    game_over_screen = game_over_text
+    display_game_over = game_over_screen.splitlines()
+    # The issue with this is that it depends on the current terminal size
+    for line in display_game_over:
+        print(line.center(column))
 
 if __name__ == "__main__":
     run()
