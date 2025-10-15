@@ -19,6 +19,10 @@ def get_operating_system():
 def check_existing_file(file_name):
     return os.path.exists(file_name)
 
+# If we want to get the terminal size row and col just call os.get_terminal_size()
+def get_terminal_col_size():
+    return os.get_terminal_size()[0]
+
 def os_command(command):
     return os.system(command)
 
