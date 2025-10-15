@@ -1,6 +1,6 @@
 from auxilliary_functions import *
 
-# Main function
+# Main function that houses all the functions
 def run():
     clear_screen_helper()
     print("start")
