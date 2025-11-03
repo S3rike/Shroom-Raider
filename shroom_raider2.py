@@ -55,6 +55,7 @@ def run():
             def play_again():
                 if processed == 'Y':
                     game_state['game_over'] = False
+                    game_state['mushrooms'] = 0
                     return True
                 elif processed == 'N':
                     return False
@@ -77,8 +78,19 @@ def run():
                             for row in show_map:
                                 print("".join(row))
                             print("---------------------")
-                            if game_state['pickup'] == True:
-                                print(f'You currently have an item')
+
+                            def check_item_pickup():
+                                if game_state['pickup'] == True:
+                                    print(f'You currently have an item')
+
+                            def check_mushrooms_collected():
+                                if game_state['mushrooms'] <= 1:
+                                    print(f'You have collected {game_state['mushrooms']} mushroom!')
+                                else:
+                                    print(f'You have collected {game_state['mushrooms']} mushrooms!')
+
+                            check_item_pickup()
+                            check_mushrooms_collected()
                             print("Move Up: [W/U]\nMove Left: [A/L]\nMove Down:[S/D]\nMove Right:[D/R]\n")
                             print("Pickup Item on Current Tile: [P]")
                             print("Check: Map & Controls Printed")
@@ -130,6 +142,11 @@ def run():
                             # If the tile stepped into is a tree, return to current state
                             elif game_map[new_row][new_col] == 'T':
                                 game_map[player_row][player_col]
+                            # Updates mushroom collected
+                            elif game_map[new_row][new_col] == '+':
+                                game_state['mushrooms'] += 1
+                                game_map[player_row][player_col] = "."
+                                game_map[new_row][new_col] = "L"
                             # If the tile stepped into is empty, proceed
                             else:
                                 game_map[player_row][player_col] = "." # todo account for running over different tiles
@@ -155,6 +172,6 @@ def run():
         menu()
 
 if __name__ == "__main__":
-    game_state = {'pickup':False, 'game_over':False}
+    game_state = {'pickup':False, 'game_over':False, 'mushrooms':0}
     item = {'x':False, '*':False}
     run()
