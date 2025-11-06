@@ -51,27 +51,31 @@ def run():
         # The menu function houses all the functions of the game
         def menu():
             print("Check: Menu Loaded")
-            choice = instruct_input("Play Again? (Y/N): ")
-            processed = choice.strip().upper()
 
             # Boolean that checks whether a player wants to play again
-            def play_again():
-                global game_over
+            def play_again(processed):
                 # If user wants to play again reset the values in global dictionary
                 if processed == 'Y':
                     game_state['pickup'] = False
-                    game_over = False
+                    game_state['game_over'] = False
                     game_state['mushrooms'] = 0
                     return True
                 elif processed == 'N':
                     return False
                 else:
                     clear_screen_helper()
-                    menu()
+                    return None
+                
+            res = None
+            while res is None:
+                choice = instruct_input("Play Again? (Y/N): ")
+                processed = choice.strip().upper()
+                res = play_again(processed)
+                if res is None:
+                    clear_screen_helper()
 
-            if play_again():
+            if res:
                 current_map = fetch_map()
-                global game_over
                 while True:
                     if not game_state['game_over']:
                         # Display the map from fetch_maps
