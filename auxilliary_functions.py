@@ -6,6 +6,7 @@ from assets.gameover import game_over_text
 movable_tiles = {'.', '-', '+'} # Set of tiles that can be moved immediately
 pickable_items = {'x', '*'} # Set of tiles that can be picked up
 immovable_tiles = {'T', '~'} # Set of tiles that cannot be moved into
+adjustable_tiles = {'R'}
 game_state = {'pickup':False, 'holding':False, 'game_over':False, 'mushrooms':0, 'move':1}
 item = {'x':False, '*':False}
 tile = {'prev':'', 'curr':'', 'next':''}
@@ -93,6 +94,13 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
                 game_state['pickup'] = False
             else: # no item, so return to previous state
                 return
+    
+    elif next_tile in adjustable_tiles:
+        if game_map[new_row][new_col] == 'R': # tile is rock
+            game_map[player_row][player_col] = tile['curr']
+            game_map[new_row][new_col] = 'L'
+            # check if rock moved to is empty or water and update accordingly
+    
     return None
 
 def show_game_over():

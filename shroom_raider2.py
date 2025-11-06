@@ -97,25 +97,27 @@ def run():
                             # Check if the user has picked up an item
                             def check_item_pickup():
                                 if game_state['pickup'] == True:
-                                    print(f'You currently have: {game_state['holding']}')
+                                    print(f'You currently have: {game_state['holding']}\n')
                                 else:
                                     print(f'You currently do not have an item!')
                                     print(f'Pickup Item on Current Tile (if any): [P]')
                                     ...
                             check_item_pickup()
 
-                            print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]\n")
+                            print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
+                            print("\nTo quit: [!]")
 
                             return None
 
                         # Update map depending on user input
                         def play_game(game_map):
                             player_row, player_col = player_pos(game_map, player_char)
-                            print(f"You are at ({player_row}, {player_col})\n")
                             actions = instruct_input("Enter your next action: ").upper()
 
                             for action in actions:
-                                if action == "Q":
+                                if action not in ("!", "P", "W", "A", "S", "D"):
+                                    break
+                                elif action == "!":
                                     exit_terminal()
                                 elif action == 'P':
                                     if game_state['pickup'] == False and tile['prev'] in pickable_items:
