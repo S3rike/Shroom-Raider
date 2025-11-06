@@ -85,19 +85,34 @@ def run():
                             def check_item_pickup():
                                 if game_state['pickup'] == True:
                                     print(f'You currently have an item')
+                                else:
+                                    # line about not having an item
+                                    ...
 
                             # Check the number of mushrooms collected
                             def check_mushrooms_collected():
                                 if game_state['mushrooms'] <= 1:
-                                    print(f'You have collected {game_state['mushrooms']} mushroom!')
+                                    print(f'You have collected {game_state['mushrooms']} mushrooms!')
                                 else:
                                     print(f'You have collected {game_state['mushrooms']} mushrooms!')
 
                             check_item_pickup()
                             check_mushrooms_collected()
-                            print("Move Up: [W/U]\nMove Left: [A/L]\nMove Down:[S/D]\nMove Right:[D/R]\n")
-                            print("Pickup Item on Current Tile: [P]")
-                            print("Check: Map & Controls Printed")
+                            print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]\n")
+                            print(f'prev: {tile["prev"]}')
+                            print(f'curr: {tile["curr"]}')
+
+                            # Check if the user has picked up an item
+                            def check_item_pickup():
+                                if game_state['pickup'] == True:
+                                    print(f'You currently have: {game_state['holding']}')
+                                else:
+                                    print(f'You currently do not have an item!')
+                                    print(f'Pickup Item on Current Tile: [P]')
+                                    ...
+
+                            check_item_pickup()
+                            print("\nCheck: Map & Controls Printed")
                             return None
 
                         # Get player position
@@ -131,10 +146,10 @@ def run():
                             elif action == 'D':
                                 new_col += 1
                             elif action == 'P':
-                                if game_state['pickup'] != True:
+                                if game_state['pickup'] == False and tile['prev'] in pickable_items:
                                     game_state['pickup'] = True
-                                else:
-                                    game_state['pickup'] = False
+                                    game_state['holding'] = tile['prev']
+                                    tile['prev'] = '.'
                             else:
                                 print("Invalid action. Try again.")
                                 return game_map
@@ -153,7 +168,7 @@ def run():
 
                                     tile['prev'] = tile['next']
 
-                                if next_tile in movable_tiles:
+                                if next_tile in (movable_tiles | pickable_items) :
                                     check_curr_tile_state()
                                     # Updates mushroom collected
                                     if next_tile == '+':
@@ -167,14 +182,53 @@ def run():
                                         game_map[player_row][player_col] = tile['curr']
                                         game_map[new_row][new_col] = 'L'
 
+
                                 elif next_tile in immovable_tiles:
                                     # If the tile stepped into is water
                                     if game_map[new_row][new_col] == '~':
                                         game_state['game_over'] = True
                                         show_game_over()
-                                    # If the tile stepped into is a tree, return to current state
-                                    else:
-                                        game_map[player_row][player_col]
+                                    # If the tile stepped into is a tree
+                                    elif game_map[new_row][new_col] == 'T':
+                                        if game_state['pickup']: # has item
+                                                                                    
+                                            if game_state['holding'] == 'x': # axe, set tree to empty
+                                                check_curr_tile_state()
+                                                tile['prev'] = '.'
+                                                game_map[player_row][player_col] = tile['curr']
+                                                game_map[new_row][new_col] = "L"
+                                            
+                                            elif game_state['holding'] == '*': # flamethrower, check and destroy adj trees
+                                                check_curr_tile_state()
+
+                                                def burn_adj_trees(r_start, c_start):
+                                                    r_max, c_max = len(game_map), len(game_map[0])
+
+                                                    stack = [(r_start, c_start)]
+                                                    checked = set([(r_start, c_start)])
+
+                                                    while stack:
+                                                        r, c = stack.pop()
+                                                        game_map[r][c] = '.' # burn
+                                                        # check neighbours
+                                                        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                                                            nr, nc = r + dr, c + dc # check adj
+
+                                                            if (0 <= nr < r_max) and (0 <= nc < c_max) and (game_map[nr][nc] == "T") and ((nr, nc) not in checked):
+                                                                # idk how to make this shorter
+                                                                checked.add((nr, nc))
+                                                                stack.append((nr, nc))
+                        
+                                                burn_adj_trees(new_row, new_col)
+                                                tile['prev'] = '.'
+                                                game_map[player_row][player_col] = tile['curr']
+                                                game_map[new_row][new_col] = "L"
+
+                                            game_state['holding'] = False
+                                            game_state['pickup'] = False
+
+                                        else: # no item, so return to previous state
+                                            game_map[player_row][player_col]
 
                             check_tile_to_be_moved()
                         
@@ -198,7 +252,7 @@ def run():
         menu()
 
 if __name__ == "__main__":
-    game_state = {'pickup':False, 'game_over':False, 'mushrooms':0, 'move':1}
+    game_state = {'pickup':False, 'holding':False, 'game_over':False, 'mushrooms':0, 'move':1}
     item = {'x':False, '*':False}
     tile = {'prev':'', 'curr':'', 'next':''}
     
