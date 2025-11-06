@@ -5,14 +5,12 @@
 
 from auxilliary_functions import *
 
-# global game_over
 game_over = False
 player_char = "L"
 
 # While the game is running run this function
 def run():
     clear_screen_helper()
-    print("start")
     while True:
         # Return list of rows in map
         def fetch_map():
@@ -22,7 +20,8 @@ def run():
                 attempts = 0
                 # Limit the number of tries that a person could enter map file 
                 def limit_tries(n):
-                    file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
+                    map_name = instruct_input("Enter name of the map: ")
+                    file_name = f"maps/{map_name}.txt"
 
                     if check_existing_file(file_name):
                         clear_screen_helper()
@@ -43,14 +42,12 @@ def run():
                 return raw_file
             
             file = choose_map()
-            print("Check: Map Chosen")
             map = [list(row) for row in file.read().split("\n")]
             file.close()
             return map
 
         # The menu function houses all the functions of the game
         def menu():
-            print("Check: Menu Loaded")
 
             # Boolean that checks whether a player wants to play again
             def play_again(processed):
@@ -68,7 +65,7 @@ def run():
                 
             res = None
             while res is None:
-                choice = instruct_input("Play Again? (Y/N): ")
+                choice = instruct_input("Play again? (Y/N): ")
                 processed = choice.strip().upper()
                 res = play_again(processed)
                 if res is None:
@@ -86,21 +83,22 @@ def run():
                                 print("".join(row))
                             print("---------------------")
 
-                            # Check the number of mushrooms collected
+                            # check mushrooms collected
                             def check_mushrooms_collected():
-                                if game_state['mushrooms'] <= 1:
-                                    print(f'You have collected {game_state['mushrooms']} mushrooms!')
+                                if game_state['mushrooms'] <= 1: # set to when all collected
+                                    print(f'You have collected all {game_state['mushrooms']} mushrooms!\n')
                                 else:
-                                    print(f'You have collected {game_state['mushrooms']} mushrooms!')
+                                    print(f'You have collected {game_state['mushrooms']} mushrooms!\n')
                             check_mushrooms_collected()
 
-                            # Check if the user has picked up an item
+                            # check if item picked up
                             def check_item_pickup():
                                 if game_state['pickup'] == True:
-                                    print(f'You currently have: {game_state['holding']}\n')
+                                    print(f'You currently have: {pickable_items[game_state['holding']]}')
+                                elif tile['prev'] in pickable_items.keys():
+                                    print(f'There is a {pickable_items[tile['prev']]} below you! Input [P] to pick it up!')
                                 else:
                                     print(f'You currently do not have an item!')
-                                    print(f'Pickup Item on Current Tile (if any): [P]')
                                     ...
                             check_item_pickup()
 

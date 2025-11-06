@@ -4,12 +4,11 @@ from assets.gameover import game_over_text
 
 # global vars
 movable_tiles = {'.', '-', '+'} # Set of tiles that can be moved immediately
-pickable_items = {'x', '*'} # Set of tiles that can be picked up
+pickable_items = {'x': "Axe", '*': "Flamethrower"} # Set of tiles that can be picked up
 immovable_tiles = {'T', '~'} # Set of tiles that cannot be moved into
 adjustable_tiles = {'R'}
 game_state = {'pickup':False, 'holding':False, 'game_over':False, 'mushrooms':0, 'move':1}
-item = {'x':False, '*':False}
-tile = {'prev':'', 'curr':'', 'next':''}
+tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
 
 def new_pos(action, player_row, player_col):
     new_row, new_col = player_row, player_col
@@ -40,7 +39,7 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
         else:
             tile['curr'] = tile['prev']
         tile['prev'] = tile['next']
-    if next_tile in (movable_tiles | pickable_items) :
+    if next_tile in (movable_tiles | pickable_items.keys()) :
         check_curr_tile_state()
 
         # Updates mushroom collected
@@ -97,9 +96,34 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
     
     elif next_tile in adjustable_tiles:
         if game_map[new_row][new_col] == 'R': # tile is rock
+            to_row = new_row - player_row # directions of player
+            to_col = new_col - player_col
+            rock_to_row = new_row + to_row # where will rick go
+            rock_to_col = new_col + to_col
+
+            if (0 <= rock_to_row < len(game_map)) and (0 <= rock_to_col < len(game_map[0])): # rock in bounds
+                rock_to_tile = game_map[rock_to_row][rock_to_col]
+
+                if rock_to_tile in (".", "-", "~"):
+                    if tile['curr'] == '': # set under rock to '.'
+                        tile['curr'] = '.'
+                    else:
+                        tile['curr'] = tile['prev']
+
+                    if rock_to_tile == '~':
+                        game_map[rock_to_row][rock_to_col] = '-' # replace water
+                    else:
+                        game_map[rock_to_row][rock_to_col] = 'R' # replace previous
+
+                game_map[player_row][player_col] = tile['curr']
+                game_map[new_row][new_col] = 'L'
+                tile['prev'] = '.'
+                    
+            else:
+                return # rock not in bounds
+
             game_map[player_row][player_col] = tile['curr']
             game_map[new_row][new_col] = 'L'
-            # check if rock moved to is empty or water and update accordingly
     
     return None
 
