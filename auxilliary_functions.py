@@ -1,5 +1,108 @@
 import os
 import sys
+from assets.gameover import game_over_text
+
+# global vars
+movable_tiles = {'.', '-', '+'} # Set of tiles that can be moved immediately
+pickable_items = {'x', '*'} # Set of tiles that can be picked up
+immovable_tiles = {'T', '~'} # Set of tiles that cannot be moved into
+game_state = {'pickup':False, 'holding':False, 'game_over':False, 'mushrooms':0, 'move':1}
+item = {'x':False, '*':False}
+tile = {'prev':'', 'curr':'', 'next':''}
+
+def new_pos(action, player_row, player_col):
+    new_row, new_col = player_row, player_col
+    if action == 'W':
+        new_row -= 1
+    elif action == 'S':
+        new_row += 1
+    elif action == 'A':
+        new_col -= 1
+    elif action == 'D':
+        new_col += 1
+    return new_row, new_col
+
+# Get player position
+def player_pos(game_map, player_char):
+    for row_index, row_list in enumerate(game_map):
+        for col_index, cell_char in enumerate(row_list):
+            if cell_char == player_char:
+                return (row_index, col_index)
+            
+def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
+    tile['next'] = game_map[new_row][new_col]
+    next_tile = tile['next']
+    # Checks if this is the first time moving
+    def check_curr_tile_state():
+        if tile['curr'] == '':
+            tile['curr'] = '.'
+        else:
+            tile['curr'] = tile['prev']
+        tile['prev'] = tile['next']
+    if next_tile in (movable_tiles | pickable_items) :
+        check_curr_tile_state()
+
+        # Updates mushroom collected
+        if next_tile == '+':
+            tile['prev'] = '.'
+            game_state['mushrooms'] += 1
+            game_map[player_row][player_col] = tile['curr']
+            game_map[new_row][new_col] = "L"
+        
+        # Update map upon moving
+        else:
+            game_map[player_row][player_col] = tile['curr']
+            game_map[new_row][new_col] = 'L'
+    elif next_tile in immovable_tiles:
+        # If the tile stepped into is water
+        if game_map[new_row][new_col] == '~':
+            game_state['game_over'] = True
+            show_game_over()
+            
+        # If the tile stepped into is a tree
+        elif game_map[new_row][new_col] == 'T':
+            if game_state['pickup']: # has item
+                                                        
+                if game_state['holding'] == 'x': # axe, set tree to empty
+                    check_curr_tile_state()
+                    tile['prev'] = '.'
+                    game_map[player_row][player_col] = tile['curr']
+                    game_map[new_row][new_col] = "L"
+                
+                elif game_state['holding'] == '*': # flamethrower, check and destroy adj trees
+                    check_curr_tile_state()
+                    def burn_adj_trees(r_start, c_start):
+                        r_max, c_max = len(game_map), len(game_map[0])
+                        stack = [(r_start, c_start)]
+                        checked = set([(r_start, c_start)])
+                        while stack:
+                            r, c = stack.pop()
+                            game_map[r][c] = '.' # burn
+                            # check neighbours
+                            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                                nr, nc = r + dr, c + dc # check adj
+                                if (0 <= nr < r_max) and (0 <= nc < c_max) and (game_map[nr][nc] == "T") and ((nr, nc) not in checked):
+                                    # idk how to make this shorter
+                                    checked.add((nr, nc))
+                                    stack.append((nr, nc))
+                    burn_adj_trees(new_row, new_col)
+                    tile['prev'] = '.'
+                    game_map[player_row][player_col] = tile['curr']
+                    game_map[new_row][new_col] = "L"
+                game_state['holding'] = False
+                game_state['pickup'] = False
+            else: # no item, so return to previous state
+                return
+    return None
+
+def show_game_over():
+    column = get_terminal_col_size()
+    clear_screen_helper()
+    game_over_screen = game_over_text
+    display_game_over = game_over_screen.splitlines()
+    # The issue with this is that it depends on the current terminal size
+    for line in display_game_over:
+        print(line.center(column))
 
 def exit_terminal():
     return sys.exit()
