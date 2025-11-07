@@ -1,5 +1,6 @@
 import os
 import sys
+from playsound3 import playsound
 from assets.gameover import game_over_text
 
 # global vars
@@ -9,6 +10,22 @@ immovable_tiles = {'T', '~'} # Set of tiles that cannot be moved into
 adjustable_tiles = {'R'}
 game_state = {'pickup':False, 'holding':False, 'game_over':False, 'mushrooms':0, 'move':1}
 tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
+latest_action = None
+sounds = {
+    'pick': 'pickup_pixabay.mp3',
+    'move': 'footstep_short_mixkit.wav',
+    'cut': 'treecut_pixabay.wav',
+    'burn': 'treeburn_pixabay.wav',
+    'water': 'fall_water_pixabay.mp3', # used but maybe not needed?
+    'push': 'rock_push_pixabay.wav',
+    'game_over': 'game_over_pixabay.mp3', # currently unused
+    'menu': 'menu_music_pixabay.mp3', # currently unused
+    'win': 'win_pixabay.mp3' # currently unused
+}
+
+def action_sound(action_type):
+    if action_type in sounds.keys():
+        playsound(f"assets/audio/{sounds[action_type]}", block=False)
 
 def new_pos(action, player_row, player_col):
     new_row, new_col = player_row, player_col
@@ -30,6 +47,7 @@ def player_pos(game_map, player_char):
                 return (row_index, col_index)
             
 def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
+    global latest_action
     tile['next'] = game_map[new_row][new_col]
     next_tile = tile['next']
     # Checks if this is the first time moving
@@ -39,7 +57,8 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
         else:
             tile['curr'] = tile['prev']
         tile['prev'] = tile['next']
-    if next_tile in (movable_tiles | pickable_items.keys()) :
+
+    if next_tile in (movable_tiles | pickable_items.keys()):
         check_curr_tile_state()
 
         # Updates mushroom collected
@@ -48,14 +67,18 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
             game_state['mushrooms'] += 1
             game_map[player_row][player_col] = tile['curr']
             game_map[new_row][new_col] = "L"
+            latest_action = 'mushroom'
         
         # Update map upon moving
         else:
             game_map[player_row][player_col] = tile['curr']
             game_map[new_row][new_col] = 'L'
+            latest_action = 'move'
+
     elif next_tile in immovable_tiles:
         # If the tile stepped into is water
         if game_map[new_row][new_col] == '~':
+            latest_action = 'water'
             game_state['game_over'] = True
             show_game_over()
             
@@ -68,6 +91,7 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
                     tile['prev'] = '.'
                     game_map[player_row][player_col] = tile['curr']
                     game_map[new_row][new_col] = "L"
+                    latest_action = 'cut'
                 
                 elif game_state['holding'] == '*': # flamethrower, check and destroy adj trees
                     check_curr_tile_state()
@@ -89,6 +113,8 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
                     tile['prev'] = '.'
                     game_map[player_row][player_col] = tile['curr']
                     game_map[new_row][new_col] = "L"
+                    latest_action = 'burn'
+                    
                 game_state['holding'] = False
                 game_state['pickup'] = False
             else: # no item, so return to previous state
@@ -112,12 +138,14 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
 
                     if rock_to_tile == '~':
                         game_map[rock_to_row][rock_to_col] = '-' # replace water
-                    else:
+                    elif rock_to_tile != "T" and rock_to_tile != "R":
                         game_map[rock_to_row][rock_to_col] = 'R' # replace previous
+
 
                 game_map[player_row][player_col] = tile['curr']
                 game_map[new_row][new_col] = 'L'
                 tile['prev'] = '.'
+                latest_action = 'push'
                     
             else:
                 return # rock not in bounds
@@ -126,6 +154,9 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
             game_map[new_row][new_col] = 'L'
     
     return None
+
+#def play_audio():
+
 
 def show_game_over():
     column = get_terminal_col_size()
