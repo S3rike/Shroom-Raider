@@ -84,7 +84,8 @@ def run():
                             clear_screen_helper()
                             print("\n--- Current Map ---\n")
                             for row in show_map:
-                                print("".join(row))
+                                emoji_display = [tile_ui.get(tile, tile) for tile in row]
+                                print("".join(emoji_display))
                             print("---------------------")
 
                             # check mushrooms collected
