@@ -16,3 +16,5 @@ wip
 ### Running the Game
 
 ### Gameplay Basics
+
+1. **Objective:** Go wild and capture the mushrooms
