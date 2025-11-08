@@ -1,1 +1,6 @@
+from auxilliary_functions import *
+from assets.gameover import game_over_text
 
+class Game:
+    def __init__(self, name):
+        self.player_character
