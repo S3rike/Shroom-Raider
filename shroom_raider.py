@@ -4,6 +4,7 @@
 ###########################################################
 
 from auxilliary_functions import *
+import auxilliary_functions as aux
 
 game_over = False
 player_char = "L"
@@ -60,7 +61,7 @@ def run():
                     game_state['pickup'] = False
                     game_state['game_over'] = False
                     mushroom_count['total'] = 0
-                    mushroom_count['collected'] = 0
+                    mushroom_count['collected'] = 0 
                     return True
                 elif processed == 'N':
                     return False
