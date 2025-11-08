@@ -79,6 +79,7 @@ def run():
 
             if res:
                 current_map = fetch_map()
+                original_map = copy.deepcopy(current_map)
                 while True:
                     # If not game over
                     if not game_state['game_over']:
@@ -111,7 +112,7 @@ def run():
                             check_item_pickup()
 
                             print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
-                            print("\nTo quit: [!]")
+                            print("\nTo reset map: [!]\nTo quit: [Q]")
 
                             return None
 
@@ -121,10 +122,8 @@ def run():
                             actions = instruct_input("Enter your next action: ").upper()
 
                             for action in actions:
-                                if action not in ("!", "P", "W", "A", "S", "D"):
+                                if action not in ("!", "P", "W", "A", "S", "D", "Q"):
                                     break
-                                elif action == "!":
-                                    exit_terminal()
                                 elif action == 'P':
                                     if game_state['pickup'] == False and tile['prev'] in pickable_items:
                                         game_state['pickup'] = True
@@ -136,11 +135,15 @@ def run():
                                     player_row, player_col = player_pos(game_map, player_char) # recalls for chain movement
                                     new_row, new_col = new_pos(action, player_row, player_col)
                                     check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col)
-
+                                elif action == 'Q':
+                                    exit_terminal()
+                                elif action == "!":
+                                    return reset_map(game_map, original_map)
+                                
                                 else:
                                     print(f"Skipping invalid action: {action}")
                             return game_map
-
+                        
                         display(current_map)
                         current_map = play_game(current_map)
                     
