@@ -1,5 +1,6 @@
 import os
 import sys
+import copy
 from assets.final_state import game_over
 from assets.final_state import stage_clear
 
@@ -135,6 +136,15 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
     
     return None
 
+# Resets the map
+def reset_map(current_map, original_map):
+    game_state['holding'] = False
+    game_state['pickup'] = False
+    mushroom_count['collected'] = 0
+    tile = {'prev':'', 'curr':'', 'next':''}
+    current_map = copy.deepcopy(original_map)
+    return current_map
+
 def show_game_over():
     column = get_terminal_col_size()
     # I commented this part since we need to display the game map and the amount of mushrooms collected
@@ -144,7 +154,6 @@ def show_game_over():
     # The issue with this is that it depends on the current terminal size
     for line in display_game_over:
         print(line.center(column))
-    
 
 def show_stage_clear():
     column = get_terminal_col_size()
