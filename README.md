@@ -1,5 +1,5 @@
 <h1 align="center">
-Shroom Raider
+<img src="icon/logo.png">
 </h1>
 <p align="center">
 <i>Immortality isn't free, the forest holds the key.</i>
