@@ -4,6 +4,7 @@
 ###########################################################
 
 from auxilliary_functions import *
+import auxilliary_functions as aux
 
 game_over = False
 player_char = "L"
@@ -99,7 +100,7 @@ def run():
                                     print(f'There is a {pickable_items[tile['prev']]} below you! Input [P] to pick it up!')
                                 else:
                                     print(f'You currently do not have an item!')
-                                    ...
+
                             check_item_pickup()
 
                             print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
@@ -109,6 +110,7 @@ def run():
 
                         # Update map depending on user input
                         def play_game(game_map):
+                            aux.latest_action = None
                             player_row, player_col = player_pos(game_map, player_char)
                             actions = instruct_input("Enter your next action: ").upper()
 
@@ -122,15 +124,13 @@ def run():
                                         game_state['pickup'] = True
                                         game_state['holding'] = tile['prev']
                                         tile['prev'] = '.'
-                                    else:
-                                        print("Invalid action. Try again.")
+                                        aux.latest_action = "pick"
                                 elif action in ("W", "A", "S", "D"):
                                     player_row, player_col = player_pos(game_map, player_char) # recalls for chain movement
                                     new_row, new_col = new_pos(action, player_row, player_col)
                                     check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col)
-
-                                else:
-                                    print(f"Skipping invalid action: {action}")
+                                    
+                            action_sound(aux.latest_action)
                             return game_map
 
                         display(current_map)
