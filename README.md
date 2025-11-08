@@ -18,11 +18,30 @@
 ## 💾 Installation
 
 ### Installing Dependencies
-To install the required dependencies, open your terminal and navigate to the directory where **Shroom Raider** is located. Then running the following command:
+To install the required dependencies, open your terminal and navigate to the directory where **Shroom Raider** is located.
 
+Create the virtual environment
+```bash
+virtualenv .venv
+
+# or
+python3 -m venv .venv
+```
+
+Active .venv
+```bash
+# Linux
+source .venv/bin/activate
+
+# Windows
+./.venv/bin/activate.ps1
+```
+
+Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
+> Note that some modules may be need to be installed for Linux users.
 
 ## 📖 Tutorial
 This tutorial aims to guide new players on the mechanics of **Shroom Raider**. If you have played this game before, feel free to skip this part!
@@ -44,5 +63,6 @@ Shown below is the list of possible moves that a user can do and their correspon
 | Quit game         | Q or q   |
 
 ### Demonstration
-If you wish to collect a mushroom, just move into the tile where you can find it!
+#### Collecting a Mushroom
+Mushrooms
 
