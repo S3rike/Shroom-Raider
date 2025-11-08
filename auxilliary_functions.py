@@ -1,7 +1,7 @@
 import os
 import sys
-from assets.gameover import game_over
-from assets.gameover import stage_clear
+from assets.final_state import game_over
+from assets.final_state import stage_clear
 
 # global vars
 movable_tiles = {'.', '-', '+'} # Set of tiles that can be moved immediately
