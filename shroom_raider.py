@@ -80,6 +80,7 @@ def run():
             if res:
                 current_map = fetch_map()
                 while True:
+                    # If not game over
                     if not game_state['game_over']:
                         # Display the map from fetch_maps
                         def display(show_map):
@@ -142,7 +143,9 @@ def run():
 
                         display(current_map)
                         current_map = play_game(current_map)
-                    if game_state['game_over']:
+                    
+                    # If game over
+                    else:
                         break
             else:
                 exit_terminal()

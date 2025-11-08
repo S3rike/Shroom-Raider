@@ -137,7 +137,8 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
 
 def show_game_over():
     column = get_terminal_col_size()
-    clear_screen_helper()
+    # I commented this part since we need to display the game map and the amount of mushrooms collected
+    # clear_screen_helper()
     game_over_screen = game_over
     display_game_over = game_over_screen.splitlines()
     # The issue with this is that it depends on the current terminal size
@@ -147,7 +148,8 @@ def show_game_over():
 
 def show_stage_clear():
     column = get_terminal_col_size()
-    clear_screen_helper()
+    # I commented this part since we need to display the game map and the amount of mushrooms collected
+    # clear_screen_helper()
     stage_clear_screen = stage_clear
     display_stage_clear = stage_clear_screen.splitlines()
     # The issue with this is that it depends on the current terminal size
