@@ -5,28 +5,32 @@ Shroom Raider
 <i>Immortality isn't free, the forest holds the key.</i>
 </p>
 
-*Being mortal is boring!* You are **Laro Craft** an experienced adventurer that longs to experience a taste of immortality. According to the legends, there exists a special mushroom in the **Forest of Ei** that grants a person immortal life. However, the journey you will face won't be easy. You will have to traverse the forest using the items found in the wild. 
+*Being mortal is boring!* You are **Laro Craft** an experienced adventurer that longs to experience a taste of immortality. According to the legends, there exists a special mushroom in the **Forest of Ei** that grants a person immortal life. However, the journey you will face won't be easy. You will have to collect as many mushrooms as you can using the items you can see in the wild. Are you willing to take on this **quest to eternity**?
 
-## Table of Contents
-- [Installation](#installation)
-- [Tutorial](#tutorial)
+## 📒 Table of Contents
+- [Installation](#-installation)
+    - [Installing Dependencies](#installing-dependencies)
+- [Tutorial](#📖-tutorial)
+    - [How should you play this game?](#🍄-goal)
+    - [Movement System](#🏃‍♂️-movement-system)
+    - [Demonstration](#demonstration)
 
-## Installation
+## 💾 Installation
 
 ### Installing Dependencies
-To install the necessary requirements ...
+To install the required dependencies, open your terminal and navigate to the directory where **Shroom Raider** is located. Then running the following command:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Tutorial
+## 📖 Tutorial
 This tutorial aims to guide new players on the mechanics of **Shroom Raider**. If you have played this game before, feel free to skip this part!
 
-### Goal
-The aim of the game is to 
+### 🍄 Goal
+The aim of the game is to collect all the **mushrooms** you can see while having fun!
 
-### Movement System
+### 🏃‍♂️ Movement System
 Shown below is the list of possible moves that a user can do and their corresponding keybinds.
 
 | Move              | Keybind  | 
