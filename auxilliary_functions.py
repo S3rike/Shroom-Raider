@@ -107,12 +107,13 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
         if game_map[new_row][new_col] == 'R': # tile is rock
             to_row = new_row - player_row # directions of player
             to_col = new_col - player_col
-            rock_to_row = new_row + to_row # where will rick go
+            rock_to_row = new_row + to_row # where will rock go
             rock_to_col = new_col + to_col
 
             if (0 <= rock_to_row < len(game_map)) and (0 <= rock_to_col < len(game_map[0])): # rock in bounds
                 rock_to_tile = game_map[rock_to_row][rock_to_col]
 
+                # If the tile the rock is moving to is valid
                 if rock_to_tile in (".", "-", "~"):
                     if tile['curr'] == '': # set under rock to '.'
                         tile['curr'] = '.'
@@ -123,11 +124,9 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
                         game_map[rock_to_row][rock_to_col] = '-' # replace water
                     else:
                         game_map[rock_to_row][rock_to_col] = 'R' # replace previous
-
-                game_map[player_row][player_col] = tile['curr']
-                game_map[new_row][new_col] = 'L'
-                tile['prev'] = '.'
-                    
+                # If the tile to pushed to is invalid do nothing
+                else:
+                    return
             else:
                 return # rock not in bounds
 
@@ -144,6 +143,7 @@ def show_game_over():
     # The issue with this is that it depends on the current terminal size
     for line in display_game_over:
         print(line.center(column))
+    
 
 def show_stage_clear():
     column = get_terminal_col_size()
