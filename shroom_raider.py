@@ -79,6 +79,7 @@ def run():
 
             if res:
                 current_map = fetch_map()
+                original_map = copy.deepcopy(current_map)
                 while True:
                     # If not game over
                     if not game_state['game_over']:
@@ -124,7 +125,7 @@ def run():
                                 if action not in ("!", "P", "W", "A", "S", "D"):
                                     break
                                 elif action == "!":
-                                    exit_terminal()
+                                    return reset_map(game_map, original_map)
                                 elif action == 'P':
                                     if game_state['pickup'] == False and tile['prev'] in pickable_items:
                                         game_state['pickup'] = True
@@ -140,6 +141,8 @@ def run():
                                 else:
                                     print(f"Skipping invalid action: {action}")
                             return game_map
+                        
+                        
 
                         display(current_map)
                         current_map = play_game(current_map)
