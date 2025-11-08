@@ -59,7 +59,8 @@ def run():
                 if processed == 'Y':
                     game_state['pickup'] = False
                     game_state['game_over'] = False
-                    mushroom_count['total'], mushroom_count['collected'] = 0, 0
+                    mushroom_count['total'] = 0
+                    mushroom_count['collected'] = 0
                     return True
                 elif processed == 'N':
                     return False
