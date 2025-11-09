@@ -1,5 +1,4 @@
 from auxilliary_functions import *
-from assets.final_state import game_over_text
 
 class Game:
     def __init__(self, file_name):
@@ -43,13 +42,13 @@ class Game:
         file = open(f"maps/{self.file_name}.txt", 'rt')
         for y_coord, row in enumerate(file):
             self.map.append(list(row))
-            for x_coord, tile in enumerate(row):
-                if tile == 'L':
+            for x_coord, tile_char in enumerate(row):
+                if tile_char == 'L':
                     self.player_coords = [x_coord, y_coord]
                     self.hidden_objects[(x_coord, y_coord)] = '.'
-                elif tile == 'R':
+                elif tile_char == 'R':
                     self.hidden_objects[(x_coord, y_coord)] = '.'
-                elif tile == '+':
+                elif tile_char == '+':
                     self.mushroom_count['total'] += 1
                 else:
                     pass
@@ -65,10 +64,10 @@ class Game:
             print("".join(emoji_display))
         print("---------------------")
         print(f'You have collected {self.mushroom_count['collected']} mushrooms!\n')
-        if game_state['pickup'] == True:
+        if self.game_state['pickup'] == True:
             print(f'You currently have: {pickable_items[game_state['holding']]}')
-        elif tile['prev'] in pickable_items.keys():
-            print(f'There is a {pickable_items[tile['prev']]} below you! Input [P] to pick it up!')
+        elif self.tile['prev'] in pickable_items.keys():
+            print(f'There is a {pickable_items[self.tile['prev']]} below you! Input [P] to pick it up!')
         else:
             print(f'You currently do not have an item!')
     def menu(self):
@@ -77,6 +76,8 @@ class Game:
         ...
     def show_result(self):
 
+        ...
+    def input_sheme(self):
         ...
 def choose_map():
     while True: 
