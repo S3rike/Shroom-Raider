@@ -29,6 +29,7 @@ class Game:
                 break
         return None
     def player_input(self):
+        print(self.game_state)
         if self.game_state['error']:
             print(f"Invalid Action")
             self.game_state['error'] = False
