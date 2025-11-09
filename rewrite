@@ -2,8 +2,8 @@ from auxilliary_functions import *
 from assets.final_state import game_over_text
 
 class Game:
-    def __init__(self, file):
-        self.file = file
+    def __init__(self, file_name):
+        self.file_name = file_name
         self.map = list()
         self.player_coords = [0, 0]
         self.player_held_item = None
@@ -12,13 +12,18 @@ class Game:
         self.game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
         self.tile = {'prev':'', 'curr':'', 'next':''}
         self.continue_game = True
-    def play_game(self):
+    def run_game(self):
         self.fetch_map()
         while self.continue_game:
-            ...
+            self.play_game()
             self.continue_game = self.restart()
         return None
 
+    def play_game(self):
+        while True:
+            self.display()
+
+            ...
     def restart(self):
         while True:
             choice = instruct_input("Play again? (Y/N): ").strip().upper()
@@ -37,6 +42,10 @@ class Game:
             return False
 
     def fetch_map(self):
+        file = open(f"maps/{self.file_name}.txt", 'rt')
+        for row in file:
+            for char in row:
+                if char == ''
         ...
     def display(self):
         clear_screen()
@@ -56,7 +65,7 @@ def choose_map():
         file_name = f"maps/{map_name}.txt"
         if check_existing_file(file_name):
             clear_screen()
-            return open(file_name, 'rt')          
+            return map_name        
         else:
             clear_screen()
             print(f"File not found, try again")
