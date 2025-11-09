@@ -13,8 +13,8 @@ class Game:
         self.tile = {'prev':'', 'curr':'', 'next':''}
         self.continue_game = True
     def run_game(self):
-        self.fetch_map()
         while self.continue_game:
+            self.fetch_map()
             self.play_game()
             self.continue_game = self.restart()
         return None
@@ -22,7 +22,7 @@ class Game:
     def play_game(self):
         while True:
             self.display()
-
+ 
             ...
     def restart(self):
         while True:
@@ -36,16 +36,26 @@ class Game:
             else:
                 pass
         if bool_check:
-            self.fetch_map(self.source) 
             return True
         else:
             return False
 
     def fetch_map(self):
         file = open(f"maps/{self.file_name}.txt", 'rt')
-        for row in file:
-            for char in row:
-                if char == ''
+        for y_coord, row in enumerate(file):
+            for x_coord, tile in enumerate(row):
+                if tile == 'L':
+                    self.player_coords = [x_coord, y_coord]
+                    self.hidden_objects[(x_coord, y_coord)] = '.'
+                elif tile == 'R':
+                    self.hidden_objects[(x_coord, y_coord)] = '.'
+                elif tile == '+':
+                    self.mushroom_count['total'] += 1
+                else:
+                    pass
+        file.close()
+        return None
+
         ...
     def display(self):
         clear_screen()
