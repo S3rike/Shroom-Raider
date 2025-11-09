@@ -1,8 +1,8 @@
 import os
 import sys
 import copy
-from assets.final_state import game_over
-from assets.final_state import stage_clear
+from assets.final_state import *
+from assets.tile_tags import *
 
 # global vars
 movable_tiles = {'.', '-', '+'} # Set of tiles that can be moved immediately
@@ -168,7 +168,7 @@ def show_stage_clear():
 def exit_terminal():
     return sys.exit()
 
-def clear_screen_helper():
+def clear_screen():
     if get_operating_system() == "nt":
         os_command("cls")
     else:
