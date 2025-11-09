@@ -85,7 +85,7 @@ class Game:
                 else:
                     pass
         file.close()
-        self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'move':1}
+        self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
         self.map_rows = len(self.map)
         self.map_cols = len(self.map[0])
         return None
