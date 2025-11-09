@@ -9,6 +9,7 @@ class Game:
         self.player_held_item = None
         self.hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
+        self.game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
         self.tile = {'prev':'', 'curr':'', 'next':''}
         self.continue_game = True
     def play_game(self):
@@ -38,7 +39,12 @@ class Game:
     def fetch_map(self):
         ...
     def display(self):
-        pass
+        clear_screen()
+        print("\n--- Current Map ---\n")
+        for row in self.map:
+            emoji_display = [tile_ui.get(tile, tile) for tile in row]
+            print("".join(emoji_display))
+        print("---------------------")
     def menu(self):
         ...
     def show_game_over(self):
