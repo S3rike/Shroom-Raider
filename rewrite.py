@@ -36,7 +36,7 @@ class Game:
         for action in actions:
             # Found in auxilliary_functions
             if check_pickable_object(action, self.game_state['holding'], self.player_hidden_object):
-                game_state['holding'] = True
+                self.game_state['holding'] = True
                 self.player_held_item = self.player_hidden_object
                 self.player_hidden_object = '.'
             elif action in ("W", "A", "S", "D"):
