@@ -4,25 +4,49 @@ class Game:
     def __init__(self, file_name):
         self.file_name = file_name
         self.map = list()
-        self.player_coords = [0, 0]
+        self.map_rows = 0
+        self.map_cols = 0
+        self.player_coords = {'row': 0, 'col': 0} #col is column
         self.player_held_item = None
-        self.hidden_objects = dict()
+        self.player_hidden_object = '.'
+        self.boulder_hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
-        self.game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
-        self.tile = {'prev':'', 'curr':'', 'next':''}
-        self.continue_game = True
+        self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
+        self.restart_game = True
     def run_game(self):
-        while self.continue_game:
+        while self.restart_game:
             self.fetch_map()
             self.play_game()
             self.show_result()
-            self.continue_game = self.restart()
+            self.restart_game = self.restart()
         return None
 
     def play_game(self):
         while True:
             self.display()
-        ...
+            self.player_input()
+            if check_game_over(self):
+                break
+        return None
+    def player_input(self):
+        actions = instruct_input("Enter your next action: ").upper()
+        for action in actions:
+            # Found in auxilliary_functions
+            if check_pickable_object(action, self.game_state['holding'], self.player_hidden_object):
+                game_state['holding'] = True
+                self.player_held_item = self.player_hidden_object
+                self.player_hidden_object = '.'
+            elif action in ("W", "A", "S", "D"):
+                # Found in auxilliary_functions
+                dest_row, dest_col = new_pos(action, self.player_coords['row'], self.player_coords['col'])
+                check_movement(self, dest_row, dest_col, self.player_coords['row'], self.player_coords['col'])
+            elif action == 'Q':
+                exit_terminal()
+            elif action == "!":
+                self.fetch_map()
+            else:
+                print(f"Skipping invalid action: {action}")
+        return None
     def restart(self):
         while True:
             choice = instruct_input("Play again? (Y/N): ").strip().upper()
@@ -40,22 +64,24 @@ class Game:
             return False
     def fetch_map(self):
         file = open(f"maps/{self.file_name}.txt", 'rt')
-        for y_coord, row in enumerate(file):
-            self.map.append(list(row))
-            for x_coord, tile_char in enumerate(row):
+        for y_coord, tile_row in enumerate(file):
+            self.map.append(list(tile_row))
+            for x_coord, tile_char in enumerate(tile_row):
                 if tile_char == 'L':
-                    self.player_coords = [x_coord, y_coord]
-                    self.hidden_objects[(x_coord, y_coord)] = '.'
+                    self.player_coords['row'] = y_coord
+                    self.player_coords['col'] = x_coord
+                    self.player_hidden_object = '.'
                 elif tile_char == 'R':
-                    self.hidden_objects[(x_coord, y_coord)] = '.'
+                    self.boulder_hidden_objects[(x_coord, y_coord)] = '.'
                 elif tile_char == '+':
                     self.mushroom_count['total'] += 1
                 else:
                     pass
         file.close()
+        self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'move':1}
+        self.map_rows = len(self.map)
+        self.map_cols = len(self.map[0])
         return None
-
-        ...
     def display(self):
         clear_screen()
         print("\n--- Current Map ---\n")
@@ -64,21 +90,18 @@ class Game:
             print("".join(emoji_display))
         print("---------------------")
         print(f'You have collected {self.mushroom_count['collected']} mushrooms!\n')
-        if self.game_state['pickup'] == True:
+        if self.game_state['holding'] == True:
             print(f'You currently have: {pickable_items[game_state['holding']]}')
-        elif self.tile['prev'] in pickable_items.keys():
-            print(f'There is a {pickable_items[self.tile['prev']]} below you! Input [P] to pick it up!')
+        elif self.player_hidden_object in pickable_items.keys():
+            print(f'There is a {pickable_items[self.player_hidden_object]} below you! Input [P] to pick it up!')
         else:
             print(f'You currently do not have an item!')
-    def menu(self):
-        ...
-    def show_game_over(self):
-        ...
+        print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
+        print("\nTo reset map: [!]\nTo quit: [Q]")
+        return None
     def show_result(self):
+        ...
 
-        ...
-    def input_sheme(self):
-        ...
 def choose_map():
     while True: 
         map_name = instruct_input("Enter path of map (etc. Map1): ")
@@ -89,6 +112,11 @@ def choose_map():
         else:
             clear_screen()
             print(f"File not found, try again")
+def menu(self):
+    ...
 
 if __name__ == "__main__":
+    while True:
+        menu()
+        session = Game(choose_map())
     ...
