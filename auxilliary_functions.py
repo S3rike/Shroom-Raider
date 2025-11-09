@@ -5,14 +5,9 @@ from assets.final_state import *
 from assets.tile_tags import *
 
 # global vars
-movable_tiles = {'.', '-', '+'} # Set of tiles that can be moved immediately
-pickable_items = {'x': "Axe", '*': "Flamethrower"} # Set of tiles that can be picked up
-immovable_tiles = {'T', '~'} # Set of tiles that cannot be moved into
-adjustable_tiles = {'R'}
 game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
 mushroom_count = {'total':0, 'collected':0}
 tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
-tile_ui = {'L':'🧑', '.':'　', 'T':'🌲', '+':'🍄', 'R':'🪨', '~':'🟦', '-':'⬜', 'x':'🪓', '*':'🔥'}
 
 def new_pos(action, player_row, player_col):
     new_row, new_col = player_row, player_col
