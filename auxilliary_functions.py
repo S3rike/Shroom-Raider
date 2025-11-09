@@ -9,17 +9,84 @@ game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
 mushroom_count = {'total':0, 'collected':0}
 tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
 
+def check_pickable_object(action, holding_item, hidden_object):
+    return action == 'P' and holding_item == False and hidden_object in pickable_items
+def check_game_over(session):
+    bool_check1 = session.mushroom_count['total'] == session.mushroom_count['collected']
+    bool_check2 = session.game_state['drowning']
+    bool_check3 = session.game_state['lost']
+    return bool_check1 or bool_check2 or bool_check3
+def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest means destination
+    dest_tile = session.map[dest_row][dest_col]
+    if dest_tile in movable_tiles:
+        if dest_tile == '+':
+            session.mushroom_count['collected'] += 1
+            dest_tile = '.'
+        modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
+    elif dest_tile in pickable_items.keys():
+        modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
+    elif dest_tile in adjustable_tiles:
+        to_row = dest_row - curr_row # directions of player
+        to_col = dest_col - curr_col
+        rock_dest_row = dest_row + to_row # where will rock go
+        rock_dest_col = dest_col + to_col
+
+        if pos_in_bounds(len(session.map), len(session.map[0]), rock_dest_row, rock_dest_col): # rock in bounds
+            rock_dest_tile = session.map[rock_dest_row][rock_dest_col]
+            # If the tile the rock is moving to is valid
+            if rock_dest_tile in {".", "-"}:
+                session.map[rock_dest_row][rock_dest_col] = rock_dest_tile
+                session.map[dest_row][dest_col] = session.boulder_hidden_objects[(dest_row, dest_col)]
+                session.boulder_hidden_objects.pop((dest_row, dest_col))
+                session.boulder_hidden_objects[(dest_row, dest_col)] = rock_dest_tile
+                modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
+            elif rock_dest_tile == '~':
+                session.map[rock_dest_row][rock_dest_col] = '-' # replace water
+                session.map[dest_row][dest_col] = session.boulder_hidden_objects[(dest_row, dest_col)]
+                session.boulder_hidden_objects.pop((dest_row, dest_col))
+                modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
+            else:
+                pass #invalid
+        else:
+            pass #invalid
+    elif dest_tile == '~':
+        session.game_state['drowning'] = True
+    elif dest_tile == 'T':
+        if session.game_state['holding']:
+            use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
+        else:
+            pass #invalid
+        ...
+    else:
+        pass #invalid but definitely will not be used
+    return None
+def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, cur_col):
+    if session.player_held_item == 'x':
+        dest_tile = '.'
+        modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
+    else:
+        
+    ...
+def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
+    session.map[curr_row][curr_col] = session.player_hidden_object
+    session.player_hidden_object = dest_tile
+    session.map[dest_row][dest_col] = 'L'
+    session.player_coords['row'] = dest_row
+    session.player_coords['col'] = dest_col
+
+def pos_in_bounds(total_row, total_col, row, col):
+    return (0 <= row < total_row) and (0 <= col < total_col)
 def new_pos(action, player_row, player_col):
-    new_row, new_col = player_row, player_col
+    dest_row, dest_col = player_row, player_col
     if action == 'W':
-        new_row -= 1
+        dest_row -= 1
     elif action == 'S':
-        new_row += 1
+        dest_row += 1
     elif action == 'A':
-        new_col -= 1
+        dest_col -= 1
     elif action == 'D':
-        new_col += 1
-    return new_row, new_col
+        dest_col += 1
+    return dest_row, dest_col
 
 # Get player position
 def player_pos(game_map, player_char):
