@@ -4,11 +4,7 @@ import os
 import sys
 import copy
 
-# global vars
-game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
-mushroom_count = {'total':0, 'collected':0}
-tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
-
+# rewrite aux functions
 def check_pickable_object(action, holding_item, hidden_object):
     return action == 'P' and holding_item == False and hidden_object in pickable_items
 def check_game_over(session):
@@ -46,16 +42,16 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
                 session.boulder_hidden_objects.pop((dest_row, dest_col))
                 modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
             else:
-                pass #invalid
+                session.game_state['error'] = True
         else:
-            pass #invalid
+            session.game_state['error'] = True
     elif dest_tile == '~':
         session.game_state['drowning'] = True
     elif dest_tile == 'T':
         if session.game_state['holding']:
             use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
         else:
-            pass #invalid
+            session.game_state['error'] = True
         ...
     else:
         pass #invalid but definitely will not be used
@@ -104,7 +100,7 @@ def new_pos(action, player_row, player_col):
     elif action == 'D':
         dest_col += 1
     return dest_row, dest_col
-
+#-------------------------------------------------------------------
 # Get player position
 def player_pos(game_map, player_char):
     for row_index, row_list in enumerate(game_map):
