@@ -29,6 +29,9 @@ class Game:
                 break
         return None
     def player_input(self):
+        if self.game_state['error']:
+            print(f"Invalid Action")
+            self.game_state['error'] = False
         actions = instruct_input("Enter your next action: ").upper()
         for action in actions:
             # Found in auxilliary_functions
@@ -49,6 +52,9 @@ class Game:
         return None
     def restart(self):
         while True:
+            if self.game_state['error']:
+                print(f"Invalid Action")
+                self.game_state['error'] = False
             choice = instruct_input("Play again? (Y/N): ").strip().upper()
             if choice == 'Y':
                 bool_check = True
@@ -57,7 +63,7 @@ class Game:
                 bool_check = False
                 break
             else:
-                pass
+                self.game_state['error'] = True
         if bool_check:
             return True
         else:
@@ -112,7 +118,7 @@ def choose_map():
         else:
             clear_screen()
             print(f"File not found, try again")
-def menu(self):
+def menu():
     ...
 
 if __name__ == "__main__":
