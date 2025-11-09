@@ -78,7 +78,7 @@ class Game:
                     self.player_coords['col'] = x_coord
                     self.player_hidden_object = '.'
                 elif tile_char == 'R':
-                    self.boulder_hidden_objects[(x_coord, y_coord)] = '.'
+                    self.boulder_hidden_objects[(y_coord, x_coord)] = '.'
                 elif tile_char == '+':
                     self.mushroom_count['total'] += 1
                 else:
