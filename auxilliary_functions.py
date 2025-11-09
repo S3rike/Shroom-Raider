@@ -70,6 +70,7 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
         burn_adj_trees(session, checked_tiles, curr_row, curr_col)
     else:
         pass #invalid but definitely will not be used
+    session.player_held_item = None
     return None
 def burn_adj_trees(session, checked_tiles, row, col):
     if session.map[row][col] == 'T' and (row, col) not in checked_tiles:
