@@ -3,4 +3,20 @@ from assets.gameover import game_over_text
 
 class Game:
     def __init__(self, name):
-        self.player_character
+        self.player_coords = [0, 0]
+        self.hidden_objects = dict()
+        self.continue_game = True
+    def play_game(self):
+        ...
+    
+    def display(self):
+        ...
+    def menu(self):
+        ...
+    def choose_map(self):
+        ...
+    def fetch_map(self):
+        ...
+    def show_game_over(self):
+        ...
+    
