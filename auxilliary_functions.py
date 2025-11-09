@@ -60,13 +60,30 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
     else:
         pass #invalid but definitely will not be used
     return None
-def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, cur_col):
+def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     if session.player_held_item == 'x':
         dest_tile = '.'
         modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
+    elif session.player_held_item == '*':
+        checked_tiles = []
+        burn_adj_trees(session, checked_tiles, curr_row, curr_col)
     else:
-        
-    ...
+        pass #invalid but definitely will not be used
+    return None
+def burn_adj_trees(session, checked_tiles, row, col):
+    if session.map[row][col] == 'T' and (row, col) not in checked_tiles:
+        checked_tiles.add((row, col))
+        session.map[row][col] = '.'
+        if pos_in_bounds(session.map_row, session.map_col, row + 1, col):
+            burn_adj_trees(session, checked_tiles, row + 1, col)
+        if pos_in_bounds(session.map_row, session.map_col, row - 1, col):
+            burn_adj_trees(session, checked_tiles, row - 1, col)
+        if pos_in_bounds(session.map_row, session.map_col, row, col + 1):
+            burn_adj_trees(session, checked_tiles, row, col + 1)
+        if pos_in_bounds(session.map_row, session.map_col, row, col - 1):
+            burn_adj_trees(session, checked_tiles, row, col - 1)
+    else:
+        return None
 def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[curr_row][curr_col] = session.player_hidden_object
     session.player_hidden_object = dest_tile
