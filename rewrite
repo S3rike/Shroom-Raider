@@ -2,11 +2,18 @@ from auxilliary_functions import *
 from assets.final_state import game_over_text
 
 class Game:
-    def __init__(self, name, filename):
+    def __init__(self, name, file):
+        self.map = list()
         self.player_coords = [0, 0]
+        self.player_held_item = ""
         self.hidden_objects = dict()
+        self.mushroom_count = {'total': 0, 'collected': 0}
+        self.tile = {'prev':'', 'curr':'', 'next':''}
         self.continue_game = True
     def play_game(self):
+        ...
+
+    def fetch_map(self, file):
         ...
     def display(self):
         ...
@@ -16,19 +23,14 @@ class Game:
         ...
 
 def choose_map():
-    attempts = 0
-    # Limit the number of tries that a person could enter map file 
-    file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
-    if check_existing_file(file_name):
-        clear_screen()
-        return open(file_name, 'rt')          
-    else:
-        clear_screen()
-        print(f"File not found, try again")
-        choose_map()
-        
-    raw_file = limit_tries(attempts)
-    return raw_file
+    while True: 
+        file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
+        if check_existing_file(file_name):
+            clear_screen()
+            return open(file_name, 'rt')          
+        else:
+            clear_screen()
+            print(f"File not found, try again")
 
 if __name__ == "__main__":
     ...
