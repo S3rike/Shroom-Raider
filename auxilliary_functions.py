@@ -43,8 +43,8 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
             elif rock_dest_tile == '~':
                 session.map[rock_dest_row][rock_dest_col] = '-' # replace water
                 session.map[dest_row][dest_col] = session.boulder_hidden_objects[(dest_row, dest_col)]
+                dest_tile = session.boulder_hidden_objects[(dest_row, dest_col)]
                 session.boulder_hidden_objects.pop((dest_row, dest_col))
-                dest_tile = '.'
                 modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
             else:
                 session.game_state['error'] = True

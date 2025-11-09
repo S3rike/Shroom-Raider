@@ -93,7 +93,7 @@ class Game:
         self.show_entire_map()
         print(f'You have collected {self.mushroom_count['collected']} mushrooms!\n')
         if self.game_state['holding']:
-            print(f'You currently have: {pickable_items[self.player_hidden_object]}')
+            print(f'You currently have: {pickable_items[self.player_held_item]}')
         elif self.player_hidden_object in pickable_items.keys():
             print(f'There is a {pickable_items[self.player_hidden_object]} below you! Input [P] to pick it up!')
         else:
