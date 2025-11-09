@@ -1,8 +1,8 @@
+from assets.final_state import *
+from assets.tile_tags import *
 import os
 import sys
 import copy
-from assets.final_state import *
-from assets.tile_tags import *
 
 # global vars
 game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
