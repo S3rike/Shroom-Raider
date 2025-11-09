@@ -11,13 +11,13 @@ player_char = "L"
 
 # While the game is running run this function
 def run():
-    clear_screen_helper()
+    clear_screen()
     while True:
         # Return list of rows in map
         def fetch_map():
             # Enter map file and return the file object
             def choose_map():
-                clear_screen_helper()
+                clear_screen()
                 attempts = 0
                 # Limit the number of tries that a person could enter map file 
                 def limit_tries(n):
@@ -25,7 +25,7 @@ def run():
                     file_name = f"maps/{map_name}.txt"
 
                     if check_existing_file(file_name):
-                        clear_screen_helper()
+                        clear_screen()
                         return open(file_name, 'rt')
                     
                     else:
@@ -34,7 +34,7 @@ def run():
                             print('Sorry, you have reached the limit. Please try again.')
                             exit_terminal()
                         else:
-                            clear_screen_helper()
+                            clear_screen()
                             n += 1
                             print(f"File not found, try again. You have {3 - n} tries left")
                             limit_tries(n)
@@ -66,7 +66,7 @@ def run():
                 elif processed == 'N':
                     return False
                 else:
-                    clear_screen_helper()
+                    clear_screen()
                     return None
                 
             res = None
@@ -75,7 +75,7 @@ def run():
                 processed = choice.strip().upper()
                 res = play_again(processed)
                 if res is None:
-                    clear_screen_helper()
+                    clear_screen()
 
             if res:
                 current_map = fetch_map()
@@ -85,7 +85,7 @@ def run():
                     if not game_state['game_over']:
                         # Display the map from fetch_maps
                         def display(show_map):
-                            clear_screen_helper()
+                            clear_screen()
                             print("\n--- Current Map ---\n")
                             for row in show_map:
                                 emoji_display = [tile_ui.get(tile, tile) for tile in row]

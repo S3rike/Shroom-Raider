@@ -24,7 +24,8 @@ class Game:
 
 def choose_map():
     while True: 
-        file_name = instruct_input("Enter path of map (etc. Maps/Sample.txt): ")
+        map_name = instruct_input("Enter path of map (etc. Map1): ")
+        file_name = f"maps/{map_name}.txt"
         if check_existing_file(file_name):
             clear_screen()
             return open(file_name, 'rt')          
