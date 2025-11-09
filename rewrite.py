@@ -125,4 +125,5 @@ if __name__ == "__main__":
     while True:
         menu()
         session = Game(choose_map())
+        session.run_game()
     ...
