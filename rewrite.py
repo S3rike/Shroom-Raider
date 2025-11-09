@@ -55,7 +55,7 @@ class Game:
             if self.game_state['error']:
                 print(f"Invalid Action")
                 self.game_state['error'] = False
-            choice = instruct_input("Restart Map Again? (Y/N): ").strip().upper()
+            choice = instruct_input("Restart Map? (Y/N): ").strip().upper()
             if choice == 'Y':
                 bool_check = True
                 break
