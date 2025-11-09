@@ -48,14 +48,14 @@ class Game:
             elif action == "!":
                 self.fetch_map()
             else:
-                print(f"Skipping invalid action: {action}")
+                print(f"Skipping Invalid Action: {action}")
         return None
     def restart(self):
         while True:
             if self.game_state['error']:
                 print(f"Invalid Action")
                 self.game_state['error'] = False
-            choice = instruct_input("Play again? (Y/N): ").strip().upper()
+            choice = instruct_input("Restart Map Again? (Y/N): ").strip().upper()
             if choice == 'Y':
                 bool_check = True
                 break
