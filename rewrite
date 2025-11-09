@@ -2,21 +2,43 @@ from auxilliary_functions import *
 from assets.final_state import game_over_text
 
 class Game:
-    def __init__(self, name, file):
+    def __init__(self, file):
+        self.file = file
         self.map = list()
         self.player_coords = [0, 0]
-        self.player_held_item = ""
+        self.player_held_item = None
         self.hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
         self.tile = {'prev':'', 'curr':'', 'next':''}
         self.continue_game = True
     def play_game(self):
-        ...
+        self.fetch_map()
+        while self.continue_game:
+            ...
+            self.continue_game = self.restart()
+        return None
 
-    def fetch_map(self, file):
+    def restart(self):
+        while True:
+            choice = instruct_input("Play again? (Y/N): ").strip().upper()
+            if choice == 'Y':
+                bool_check = True
+                break
+            elif choice == 'N':
+                bool_check = False
+                break
+            else:
+                pass
+        if bool_check:
+            self.fetch_map(self.source) 
+            return True
+        else:
+            return False
+
+    def fetch_map(self):
         ...
     def display(self):
-        ...
+        pass
     def menu(self):
         ...
     def show_game_over(self):
