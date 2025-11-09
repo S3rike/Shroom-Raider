@@ -4,6 +4,10 @@ import os
 import sys
 import copy
 
+# global vars
+game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
+mushroom_count = {'total':0, 'collected':0}
+tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
 # rewrite aux functions
 def check_pickable_object(action, holding_item, hidden_object):
     return action == 'P' and holding_item == False and hidden_object in pickable_items
@@ -31,7 +35,7 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
             rock_dest_tile = session.map[rock_dest_row][rock_dest_col]
             # If the tile the rock is moving to is valid
             if rock_dest_tile in {".", "-"}:
-                session.map[rock_dest_row][rock_dest_col] = rock_dest_tile
+                session.map[rock_dest_row][rock_dest_col] = dest_tile
                 session.map[dest_row][dest_col] = session.boulder_hidden_objects[(dest_row, dest_col)]
                 session.boulder_hidden_objects.pop((dest_row, dest_col))
                 session.boulder_hidden_objects[(dest_row, dest_col)] = rock_dest_tile

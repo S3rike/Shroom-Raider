@@ -90,11 +90,7 @@ class Game:
         return None
     def display(self):
         clear_screen()
-        print("\n--- Current Map ---\n")
-        for row in self.map:
-            emoji_display = [tile_ui.get(tile, tile) for tile in row]
-            print("".join(emoji_display))
-        print("---------------------")
+        self.show_entire_map()
         print(f'You have collected {self.mushroom_count['collected']} mushrooms!\n')
         if self.game_state['holding'] == True:
             print(f'You currently have: {pickable_items[game_state['holding']]}')
@@ -104,6 +100,13 @@ class Game:
             print(f'You currently do not have an item!')
         print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
         print("\nTo reset map: [!]\nTo quit: [Q]")
+        return None
+    def show_entire_map(self):
+        print("\n--- Current Map ---\n")
+        for row in self.map:
+            emoji_display = [tile_ui.get(tile, tile) for tile in row]
+            print("".join(emoji_display))
+        print("---------------------")
         return None
     def show_result(self):
         ...
