@@ -109,6 +109,17 @@ class Game:
         print("---------------------")
         return None
     def show_result(self):
+        if self.mushroom_count['total'] == self.mushroom_count['collected']:
+            clear_screen()
+            show_stage_clear()
+        elif self.game_state['drowning']:
+            clear_screen()
+            show_game_over()
+        elif self.game_state['lost']:
+            clear_screen()
+            show_game_over()
+        else:
+            pass # Invalid; Not possible to get
         ...
 
 def choose_map():
