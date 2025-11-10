@@ -12,7 +12,7 @@ class Game:
         self.boulder_hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
         self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
-        self.debug = None
+        self.debug = tuple()
         self.restart_game = True
     def run_game(self):
         while self.restart_game:

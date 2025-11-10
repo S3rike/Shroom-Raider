@@ -93,7 +93,7 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
         dest_tile = '.'
         modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
     elif session.player_held_item == '*':
-        burn_adj_trees(session, curr_row, curr_col)
+        burn_adj_trees(session, dest_row, dest_col)
         session.map[curr_row][curr_col] = session.player_hidden_object
         session.map[dest_row][dest_col] = 'L'
         session.player_coords['row'] = dest_row
