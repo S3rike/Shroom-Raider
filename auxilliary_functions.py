@@ -42,6 +42,7 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
     else:
         session.game_state['lost'] = True
         session.map[curr_row][curr_col] = session.player_hidden_object
+        return None
     if dest_tile in movable_tiles:
         if dest_tile == '+':
             session.mushroom_count['collected'] += 1
@@ -104,14 +105,13 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     return None
 
 def burn_adj_trees(session, row, col):
-    burn_stack = {(row, col)}
+    burn_stack = [(row, col)]
     checked_tiles = set()
     while burn_stack != []:
-        for tree_row, tree_col in burn_stack:
-            session.map[tree_row][tree_col] = '.'
-            checked_tiles.add((tree_row, tree_col))
-            burn_stack.remove((tree_row, tree_col))
-            burn_stack.update(tuple(check_adj_trees(session, row, col)))
+        tree_row, tree_col = burn_stack.pop()
+        session.map[tree_row][tree_col] = '.'
+        checked_tiles.add((tree_row, tree_col))
+        burn_stack.extend(tuple(check_adj_trees(session, tree_row, tree_col)))
 def check_adj_trees(session, row, col):
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
     for shift_row, shift_col in directions:
