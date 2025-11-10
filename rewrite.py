@@ -21,56 +21,6 @@ class Game:
             self.restart_game = self.restart()
         return None
 
-    def play_game(self):
-        while True:
-            self.display()
-            self.player_input()
-            if check_game_over(self):
-                break
-        return None
-    
-    def player_input(self):
-        if self.game_state['error']:
-            print(f"Invalid Action")
-            self.game_state['error'] = False
-        actions = instruct_input("Enter your next action: ").upper()
-        for action in actions:
-            # Found in auxilliary_functions
-            if check_pickable_object(action, self.game_state['holding'], self.player_hidden_object):
-                self.game_state['holding'] = True
-                self.player_held_item = self.player_hidden_object
-                self.player_hidden_object = '.'
-            elif action in ("W", "A", "S", "D"):
-                # Found in auxilliary_functions
-                dest_row, dest_col = new_pos(action, self.player_coords['row'], self.player_coords['col'])
-                check_movement(self, dest_row, dest_col, self.player_coords['row'], self.player_coords['col'])
-            elif action == 'Q':
-                exit_terminal()
-            elif action == "!":
-                self.fetch_map()
-            else:
-                print(f"Skipping Invalid Action: {action}")
-        return None
-    
-    def restart(self):
-        while True:
-            if self.game_state['error']:
-                print(f"Invalid Action")
-                self.game_state['error'] = False
-            choice = instruct_input("Restart Map? (Y/N): ").strip().upper()
-            if choice == 'Y' or choice == "!":
-                bool_check = True
-                break
-            elif choice == 'N':
-                bool_check = False
-                break
-            else:
-                self.game_state['error'] = True
-        if bool_check:
-            return True
-        else:
-            return False
-        
     def fetch_map(self):
         self.map = list()
         self.boulder_hidden_objects = dict()
@@ -95,10 +45,38 @@ class Game:
         self.map_rows = len(self.map)
         self.map_cols = len(self.map[0])
         return None
-    
+    def play_game(self):
+        while True:
+            self.display()
+            self.player_input()
+            if check_game_over(self):
+                break
+        return None
+    def player_input(self):
+        if self.game_state['error']:
+            print(f"Invalid Action")
+            self.game_state['error'] = False
+        actions = instruct_input("Enter your next action: ").upper()
+        for action in actions:
+            # Found in auxilliary_functions
+            if check_pickable_object(action, self.game_state['holding'], self.player_hidden_object):
+                self.game_state['holding'] = True
+                self.player_held_item = self.player_hidden_object
+                self.player_hidden_object = '.'
+            elif action in ("W", "A", "S", "D"):
+                # Found in auxilliary_functions
+                dest_row, dest_col = new_pos(action, self.player_coords['row'], self.player_coords['col'])
+                check_movement(self, dest_row, dest_col, self.player_coords['row'], self.player_coords['col'])
+            elif action == 'Q':
+                exit_terminal()
+            elif action == "!":
+                self.fetch_map()
+            else:
+                print(f"Skipping Invalid Action: {action}")
+        return None
     def display(self):
         clear_screen()
-        self.show_entire_map()
+        show_entire_map(self)
         print(f'You have collected {self.mushroom_count['collected']} mushrooms!\n')
         if self.game_state['holding']:
             print(f'You currently have: {pickable_items[self.player_held_item]}')
@@ -109,15 +87,24 @@ class Game:
         print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
         print("\nTo reset map: [!]\nTo quit: [Q]")
         return None
-    
-    def show_entire_map(self):
-        print("\n--- Current Map ---\n")
-        for row in self.map:
-            emoji_display = [tile_ui.get(tile, tile) for tile in row]
-            print("".join(emoji_display))
-        print("---------------------")
-        return None
-    
+    def restart(self):
+        while True:
+            if self.game_state['error']:
+                print(f"Invalid Action")
+                self.game_state['error'] = False
+            choice = instruct_input("Restart Map? (Y/N): ").strip().upper()
+            if choice == 'Y' or choice == "!":
+                bool_check = True
+                break
+            elif choice == 'N':
+                bool_check = False
+                break
+            else:
+                self.game_state['error'] = True
+        if bool_check:
+            return True
+        else:
+            return False
     def show_result(self):
         if self.mushroom_count['total'] == self.mushroom_count['collected']:
             clear_screen()
@@ -131,17 +118,6 @@ class Game:
         else:
             pass # Invalid; Not possible to get
         ...
-
-def choose_map():
-    while True: 
-        map_name = instruct_input("Enter name of map (etc. Map1): ")
-        file_name = f"maps/{map_name}.txt"
-        if check_existing_file(file_name):
-            clear_screen()
-            return map_name        
-        else:
-            clear_screen()
-            print(f"File not found, try again")
             
 def menu():
     ...

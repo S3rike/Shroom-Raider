@@ -10,6 +10,23 @@ mushroom_count = {'total':0, 'collected':0}
 tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
 
 # rewrite aux functions
+def choose_map():
+    while True: 
+        map_name = instruct_input("Enter name of map (etc. Map1): ")
+        file_name = f"maps/{map_name}.txt"
+        if check_existing_file(file_name):
+            clear_screen()
+            return map_name        
+        else:
+            clear_screen()
+            print(f"File not found, try again")
+def show_entire_map(session):
+    print("\n--- Current Map ---\n")
+    for row in session.map:
+        emoji_display = [tile_ui.get(tile, tile) for tile in row]
+        print("".join(emoji_display))
+    print("---------------------")
+    return None
 def check_pickable_object(action, holding_item, hidden_object):
     return action == 'P' and holding_item == False and hidden_object in pickable_items
 def check_game_over(session):
@@ -18,7 +35,11 @@ def check_game_over(session):
     bool_check3 = session.game_state['lost']
     return bool_check1 or bool_check2 or bool_check3
 def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest means destination
-    dest_tile = session.map[dest_row][dest_col]
+    if pos_in_bounds(session.map_rows, session.map_cols, dest_row, dest_col):
+        dest_tile = session.map[dest_row][dest_col]
+    else:
+        session.game_state['lost'] = True
+        session.map[curr_row][curr_col] = session.player_hidden_object
     if dest_tile in movable_tiles:
         if dest_tile == '+':
             session.mushroom_count['collected'] += 1
@@ -31,7 +52,7 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
         to_col = dest_col - curr_col
         rock_dest_row = dest_row + to_row # where will rock go
         rock_dest_col = dest_col + to_col
-        if pos_in_bounds(len(session.map), len(session.map[0]), rock_dest_row, rock_dest_col): # rock in bounds
+        if pos_in_bounds(session.map_rows, session.map_cols, rock_dest_row, rock_dest_col): # rock in bounds
             rock_dest_tile = session.map[rock_dest_row][rock_dest_col]
             # If the tile the rock is moving to is valid
             if rock_dest_tile in {".", "-"}:
@@ -70,6 +91,9 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     elif session.player_held_item == '*':
         checked_tiles = []
         burn_adj_trees(session, checked_tiles, curr_row, curr_col)
+        session.map[curr_row][curr_col] = session.player_hidden_object
+        session.map[dest_row][dest_col] = 'L'
+        session
     else:
         pass #invalid but definitely will not be used
     session.player_held_item = None
@@ -88,6 +112,7 @@ def burn_adj_trees(session, checked_tiles, row, col):
         if pos_in_bounds(session.map_row, session.map_col, row, col - 1):
             burn_adj_trees(session, checked_tiles, row, col - 1)
     else:
+        checked_tiles.add((row, col))
         return None
 def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[curr_row][curr_col] = session.player_hidden_object
@@ -95,7 +120,6 @@ def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[dest_row][dest_col] = 'L'
     session.player_coords['row'] = dest_row
     session.player_coords['col'] = dest_col
-
 def pos_in_bounds(total_row, total_col, row, col):
     return (0 <= row < total_row) and (0 <= col < total_col)
 def new_pos(action, player_row, player_col):
