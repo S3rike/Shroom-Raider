@@ -29,11 +29,13 @@ def show_entire_map(session):
     return None
 def check_pickable_object(action, holding_item, hidden_object):
     return action == 'P' and holding_item == False and hidden_object in pickable_items
+
 def check_game_over(session):
     bool_check1 = session.mushroom_count['total'] == session.mushroom_count['collected']
     bool_check2 = session.game_state['drowning']
     bool_check3 = session.game_state['lost']
     return bool_check1 or bool_check2 or bool_check3
+
 def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest means destination
     if pos_in_bounds(session.map_rows, session.map_cols, dest_row, dest_col):
         dest_tile = session.map[dest_row][dest_col]
@@ -84,6 +86,7 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
     else:
         pass #invalid but definitely will not be used
     return None
+
 def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     if session.player_held_item == 'x':
         dest_tile = '.'
@@ -99,6 +102,7 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.player_held_item = None
     session.game_state['holding'] = False
     return None
+
 def burn_adj_trees(session, checked_tiles, row, col):
     if session.map[row][col] == 'T' and (row, col) not in checked_tiles:
         checked_tiles.add((row, col))
@@ -114,6 +118,7 @@ def burn_adj_trees(session, checked_tiles, row, col):
     else:
         checked_tiles.add((row, col))
         return None
+    
 def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[curr_row][curr_col] = session.player_hidden_object
     session.player_hidden_object = dest_tile
@@ -122,6 +127,7 @@ def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.player_coords['col'] = dest_col
 def pos_in_bounds(total_row, total_col, row, col):
     return (0 <= row < total_row) and (0 <= col < total_col)
+
 def new_pos(action, player_row, player_col):
     dest_row, dest_col = player_row, player_col
     if action == 'W':
@@ -253,7 +259,7 @@ def reset_map(current_map, original_map):
     current_map = copy.deepcopy(original_map)
     return current_map
 
-def show_game_over(game_map):
+def show_game_over(map, mushroom_count):
     clear_screen()
     column = get_terminal_col_size()
     game_over_screen = game_over
@@ -261,11 +267,11 @@ def show_game_over(game_map):
     for line in display_game_over:
         print(line.center(column))
     print(f'However, you were able to collect {mushroom_count["collected"]} mushrooms!\n')
-    for row in game_map:
+    for row in map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
 
-def show_stage_clear(game_map):
+def show_stage_clear(map, mushroom_count):
     clear_screen()
     column = get_terminal_col_size()
     stage_clear_screen = stage_clear
@@ -274,7 +280,7 @@ def show_stage_clear(game_map):
     for line in display_stage_clear:
         print(line.center(column))
     print(f'You have collected all {mushroom_count['total']} mushrooms!\n')
-    for row in game_map:
+    for row in map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
     

@@ -108,13 +108,13 @@ class Game:
     def show_result(self):
         if self.mushroom_count['total'] == self.mushroom_count['collected']:
             clear_screen()
-            show_stage_clear(self.map)
+            show_stage_clear(self.map, self.mushroom_count)
         elif self.game_state['drowning']:
             clear_screen()
-            show_game_over(self.map)
+            show_game_over(self.map, self.mushroom_count)
         elif self.game_state['lost']:
             clear_screen()
-            show_game_over(self.map)
+            show_game_over(self.map, self.mushroom_count)
         else:
             pass # Invalid; Not possible to get
         ...
