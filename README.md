@@ -10,15 +10,15 @@
 </p>
 
 ## 📒 Table of Contents
-- [Installation Guide](#💾-installation-guide)
-    - [Install from Source](#▶️-install-from-source)
-    - [Installing Dependencies](#⬇️-installing-dependencies)
-- [User Manual](#📖-user-manual)
-    - [Objective](#🎯-objective)
-    - [Movement System](#🏃‍♂️-movement-system)
-- [Additional Features](#🎮-bonus-features)
-- [Code Structure](#📁-code-structure)
-- [Unit Testing](#🧪-unit-testing)
+- [Installation Guide](#-installation-guide)
+    - [Install from Source](#-install-from-source)
+    - [Installing Dependencies](#-installing-dependencies)
+- [User Manual](#-user-manual)
+    - [Objective](#-objective)
+    - [Movement System](#-movement-system)
+- [Additional Features](#-bonus-features)
+- [Code Structure](#-code-structure)
+- [Unit Testing](#-unit-testing)
 
 ## 💾 Installation Guide
 
