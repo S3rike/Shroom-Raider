@@ -103,7 +103,7 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.game_state['holding'] = False
     return None
 
-def burn_adj_trees(session, checked_tiles, row, col):
+def burn_adj_trees(session, row, col):
     burn_stack = [(row, col)]
     checked_tiles = []
     while burn_stack != []:
