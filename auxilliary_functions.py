@@ -22,8 +22,8 @@ def choose_map():
         if map_name.upper() == 'R':
             bool_invalid_input = False
             continue
-        elif map_name.upper() == 'R':
-            clear_screen()
+        elif map_name.upper() == 'Q':
+            exit_terminal()
         else:
             file_name = f"maps/{map_name}.txt"
             if check_existing_file(file_name):
@@ -307,6 +307,7 @@ def show_stage_clear(map, mushroom_count):
         print(''.join(emoji_display))
     
 def exit_terminal():
+    clear_screen()
     return sys.exit()
 
 def clear_screen():
