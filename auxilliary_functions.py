@@ -15,7 +15,7 @@ def choose_map():
     while True:
         clear_screen()
         show_list_maps()
-        print(f'[P] To Refresh List')
+        print(f'[R] To Refresh List')
         if bool_invalid_input:
             print(f"File Not found, Try Again")
         map_name = instruct_input("Enter Name Of Map: ")
