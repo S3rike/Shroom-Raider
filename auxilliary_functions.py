@@ -249,6 +249,9 @@ def show_stage_clear(game_map):
     for line in display_stage_clear:
         print(line.center(column))
     print(f'You have collected all {mushroom_count['total']} mushrooms!\n')
+    for row in game_map:
+        emoji_display = [tile_ui.get(tile, tile) for tile in row]
+        print(''.join(emoji_display))
     
 
 def exit_terminal():
