@@ -1,6 +1,6 @@
 TTTTTTTTT
-TT.T.+.+T
-T+.TT~TTT
-TTTTTR.xT
-T...L..*T
+TT+..+.+T
+T.TTT~TTT
+T.TTTR.xT
+T*..L...T
 TTTTTTTTT
