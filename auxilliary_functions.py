@@ -141,6 +141,7 @@ def check_adj_trees(session, row, col):
         if pos_in_bounds(session.map_rows, session.map_cols, dest_row, dest_col):
             if session.map[dest_row][dest_col] == 'T':
                 yield (dest_row, dest_col)
+# Movement methods due to being redundant
 def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[curr_row][curr_col] = session.player_hidden_object
     session.player_hidden_object = dest_tile
@@ -149,7 +150,6 @@ def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.player_coords['col'] = dest_col
 def pos_in_bounds(total_row, total_col, row, col):
     return (0 <= row < total_row) and (0 <= col < total_col)
-
 def new_pos(action, player_row, player_col):
     dest_row, dest_col = player_row, player_col
     if action == 'W':
@@ -317,7 +317,11 @@ def clear_screen():
         os_command("clear")
 
 def instruct_input(input_text):
-    return input(input_text)
+    while True:
+        try:
+            return input(input_text)
+        except:
+            pass
 
 def get_operating_system():
     return os.name

@@ -54,6 +54,8 @@ class Game:
                 break
         return None
     def player_input(self):
+        if check_game_over(self): # Only occurs during backup of a finished session
+            return None
         if self.debug != None:
             print(self.debug)
         if self.game_state['error']:
@@ -81,6 +83,21 @@ class Game:
             else:
                 print(f"Invalid Action Found: {action}")
                 break
+        return None
+    def save_game(self):
+        file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}", 'w')
+        file.write(f"{self.map_rows} {self.map_cols}")
+        file.write(f"{self.player_coords['row']} {self.player_coords['col']}")
+        file.write(f"{self.player_held_item} {self.player_hidden_object}")
+        file.write(f"{self.mushroom_count['total']} {self.mushroom_count['collected']}")
+        file.write(f"{self.game_state['holding']} {self.game_state['drowning']}")
+        file.write(f"{self.game_state['lost']} {self.game_state['error']}")
+        file.write(f"{self.restart_game}")
+        for tile_line in self.map:
+            file.write(tile_line.strip())
+        for boulder_coords in self.boulder_hidden_objects.items():
+            file.write(boulder_coords)
+        file.close()
         return None
     def display(self):
         clear_screen()
