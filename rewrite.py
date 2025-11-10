@@ -72,6 +72,10 @@ class Game:
             return False
         
     def fetch_map(self):
+        self.map = list()
+        self.boulder_hidden_objects = dict()
+        self.mushroom_count = {'total': 0, 'collected': 0}
+        self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
         file = open(f"maps/{self.file_name}.txt", 'rt')
         for y_coord, tile_row in enumerate(file):
             self.map.append(list(tile_row))
@@ -80,6 +84,7 @@ class Game:
                     self.player_coords['row'] = y_coord
                     self.player_coords['col'] = x_coord
                     self.player_hidden_object = '.'
+                    self.player_held_item = None
                 elif tile_char == 'R':
                     self.boulder_hidden_objects[(y_coord, x_coord)] = '.'
                 elif tile_char == '+':
@@ -87,7 +92,6 @@ class Game:
                 else:
                     pass
         file.close()
-        self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
         self.map_rows = len(self.map)
         self.map_cols = len(self.map[0])
         return None
@@ -117,13 +121,13 @@ class Game:
     def show_result(self):
         if self.mushroom_count['total'] == self.mushroom_count['collected']:
             clear_screen()
-            show_stage_clear(self.map)
+            show_stage_clear(self.map, self.mushroom_count)
         elif self.game_state['drowning']:
             clear_screen()
-            show_game_over(self.map)
+            show_game_over(self.map, self.mushroom_count)
         elif self.game_state['lost']:
             clear_screen()
-            show_game_over(self.map)
+            show_game_over(self.map, self.mushroom_count)
         else:
             pass # Invalid; Not possible to get
         ...
@@ -138,7 +142,7 @@ def choose_map():
         else:
             clear_screen()
             print(f"File not found, try again")
-            
+
 def menu():
     ...
 
