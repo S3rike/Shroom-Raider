@@ -12,7 +12,7 @@ class Game:
         self.boulder_hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
         self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
-        self.debug = tuple()
+        self.debug = None
         self.restart_game = True
     def run_game(self):
         while self.restart_game:
@@ -62,7 +62,11 @@ class Game:
         actions = instruct_input("Enter your next action: ").upper()
         for action in actions:
             # Found in auxilliary_functions
-            if check_pickable_object(action, self.game_state['holding'], self.player_hidden_object):
+            if check_game_over(self):
+                break
+            elif self.game_state['error']:
+                break
+            elif check_pickable_object(action, self.game_state['holding'], self.player_hidden_object):
                 self.game_state['holding'] = True
                 self.player_held_item = self.player_hidden_object
                 self.player_hidden_object = '.'
@@ -75,7 +79,8 @@ class Game:
             elif action == "!":
                 self.fetch_map()
             else:
-                print(f"Skipping Invalid Action: {action}")
+                print(f"Invalid Action Found: {action}")
+                break
         return None
     def display(self):
         clear_screen()
