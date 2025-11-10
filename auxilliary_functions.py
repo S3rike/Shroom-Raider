@@ -92,11 +92,11 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
         dest_tile = '.'
         modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
     elif session.player_held_item == '*':
-        checked_tiles = []
-        burn_adj_trees(session, checked_tiles, curr_row, curr_col)
+        burn_adj_trees(session, curr_row, curr_col)
         session.map[curr_row][curr_col] = session.player_hidden_object
         session.map[dest_row][dest_col] = 'L'
-        session
+        session.player_coords['row'] = dest_row
+        session.player_coords['col'] = dest_col
     else:
         pass #invalid but definitely will not be used
     session.player_held_item = None
@@ -104,21 +104,22 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     return None
 
 def burn_adj_trees(session, checked_tiles, row, col):
-    if session.map[row][col] == 'T' and (row, col) not in checked_tiles:
-        checked_tiles.add((row, col))
-        session.map[row][col] = '.'
-        if pos_in_bounds(session.map_row, session.map_col, row + 1, col):
-            burn_adj_trees(session, checked_tiles, row + 1, col)
-        if pos_in_bounds(session.map_row, session.map_col, row - 1, col):
-            burn_adj_trees(session, checked_tiles, row - 1, col)
-        if pos_in_bounds(session.map_row, session.map_col, row, col + 1):
-            burn_adj_trees(session, checked_tiles, row, col + 1)
-        if pos_in_bounds(session.map_row, session.map_col, row, col - 1):
-            burn_adj_trees(session, checked_tiles, row, col - 1)
-    else:
-        checked_tiles.add((row, col))
-        return None
-    
+    burn_stack = [(row, col)]
+    checked_tiles = []
+    while burn_stack != []:
+        for tree_row, tree_col in burn_stack:
+            session.map[tree_row][tree_col] = '.'
+            checked_tiles.append[(tree_row, tree_col)]
+            burn_stack.pop[(tree_row, tree_col)]
+            burn_stack.extend(tuple(check_adj_trees(session, row, col)))
+def check_adj_trees(session, row, col):
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    for shift_row, shift_col in directions:
+        dest_row = row + shift_row
+        dest_col = col + shift_col
+        if pos_in_bounds(session.map_rows, session.map_cols, dest_row, dest_col):
+            if session.map[dest_row][dest_col] == 'T':
+                yield (dest_row, dest_col)
 def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[curr_row][curr_col] = session.player_hidden_object
     session.player_hidden_object = dest_tile
