@@ -185,7 +185,7 @@ https://github.com/user-attachments/assets/af3a4392-8d2d-4512-90ad-0d50f0ac465f
 
 **🔥 Using a Flamethrower**
 
-If you've encountered this item, be careful to not burn your hands! This item allows you to burn down adjacent (those that share a common vertex) trees.
+If you've encountered this item, be careful to not burn your hands! This item allows you to burn down adjacent (those that share a common vertex) trees. This is also a **single-use** item, so be careful not to waste this!
 
 https://github.com/user-attachments/assets/0a18b67c-18d9-4884-a941-688cf96321e6
 
