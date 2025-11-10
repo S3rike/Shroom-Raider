@@ -104,14 +104,14 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     return None
 
 def burn_adj_trees(session, row, col):
-    burn_stack = [(row, col)]
-    checked_tiles = []
+    burn_stack = {(row, col)}
+    checked_tiles = set()
     while burn_stack != []:
         for tree_row, tree_col in burn_stack:
             session.map[tree_row][tree_col] = '.'
-            checked_tiles.append[(tree_row, tree_col)]
-            burn_stack.pop[(tree_row, tree_col)]
-            burn_stack.extend(tuple(check_adj_trees(session, row, col)))
+            checked_tiles.add((tree_row, tree_col))
+            burn_stack.remove((tree_row, tree_col))
+            burn_stack.update(tuple(check_adj_trees(session, row, col)))
 def check_adj_trees(session, row, col):
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
     for shift_row, shift_col in directions:
