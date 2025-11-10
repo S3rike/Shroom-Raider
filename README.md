@@ -174,6 +174,14 @@ Shown below are the list of tiles and items that you may encounter in the forest
 | 🪓         | x      | **Axe**           | Used to cut down trees (single use)                    |
 | 🔥         | *      | **Flamethrower**  | Burns adjacent trees (single use)                      |
 
+### Demonstration
+**Using an Axe**
+<video src="assets/videos/axe-demo.mp4">
+
+**Using a Flamethrower**
+<video src="assets/videos/flamethrower-demo.mp4">
+
+
 ## 👾 Bonus Features
 For more information regarding the additional features, click here...
 
