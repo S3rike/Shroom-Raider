@@ -248,7 +248,6 @@ def check_tile_to_be_moved(game_map, new_row, new_col, player_row, player_col):
 
             game_map[player_row][player_col] = tile['curr']
             game_map[new_row][new_col] = 'L'
-    
     return None
 
 # Resets the map
@@ -260,6 +259,7 @@ def reset_map(current_map, original_map):
     current_map = copy.deepcopy(original_map)
     return current_map
 
+#----------------------------------------------------------------
 def show_game_over(map, mushroom_count):
     clear_screen()
     column = get_terminal_col_size()
@@ -285,7 +285,6 @@ def show_stage_clear(map, mushroom_count):
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
     
-
 def exit_terminal():
     return sys.exit()
 
