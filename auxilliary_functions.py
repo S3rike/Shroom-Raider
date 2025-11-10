@@ -22,7 +22,7 @@ def choose_map():
         if map_name.upper() == 'R':
             bool_invalid_input = False
             continue
-        elif map_name.upper() == 'R':
+        elif map_name.upper() == 'Q':
             clear_screen()
         else:
             file_name = f"maps/{map_name}.txt"
