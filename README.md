@@ -177,7 +177,7 @@ Shown below are the list of tiles and items that you may encounter in the forest
 ### Demonstration
 **Using an Axe**
 
-<!-- https://github.com/user-attachments/assets/af3a4392-8d2d-4512-90ad-0d50f0ac465f -->
+https://github.com/user-attachments/assets/af3a4392-8d2d-4512-90ad-0d50f0ac465f
 
 **Using a Flamethrower**
 <video src="assets/videos/flamethrower-demo.mp4"></video>
