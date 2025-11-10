@@ -11,15 +11,36 @@ tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
 
 # rewrite aux functions
 def choose_map():
-    while True: 
-        map_name = instruct_input("Enter name of map (etc. Map1): ")
-        file_name = f"maps/{map_name}.txt"
-        if check_existing_file(file_name):
+    bool_invalid_input = False
+    while True:
+        clear_screen()
+        show_list_maps()
+        print(f'[R] To Refresh List       [Q] To Quit Game')
+        if bool_invalid_input:
+            print(f"File Not found, Try Again")
+        map_name = instruct_input("Enter Name Of Map: ")
+        if map_name.upper() == 'R':
+            bool_invalid_input = False
+            continue
+        elif map_name.upper() == 'R':
             clear_screen()
-            return map_name        
         else:
-            clear_screen()
-            print(f"File not found, try again")
+            file_name = f"maps/{map_name}.txt"
+            if check_existing_file(file_name):
+                clear_screen()
+                return map_name        
+            else:
+                bool_invalid_input = True
+def show_list_maps():
+    curr_directory = os.getcwd()
+    peek_folder = f'{curr_directory}/maps'
+    map_list = [file.strip('.txt') for file in os.listdir(peek_folder) if os.path.isfile(os.path.join(peek_folder, file))]
+    map_count = len(map_list)
+    print(f"-------- Available Maps --------")
+    for index in range(0, map_count,3):
+        print(f"{map_list[index]}   {map_list[index + 1]}   {map_list[index + 2]}")
+    print(f"--------------------------------\n")
+    return None
 def show_entire_map(session):
     print("\n--- Current Map ---\n")
     for row in session.map:
