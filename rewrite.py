@@ -28,6 +28,7 @@ class Game:
             if check_game_over(self):
                 break
         return None
+    
     def player_input(self):
         if self.game_state['error']:
             print(f"Invalid Action")
@@ -50,13 +51,14 @@ class Game:
             else:
                 print(f"Skipping Invalid Action: {action}")
         return None
+    
     def restart(self):
         while True:
             if self.game_state['error']:
                 print(f"Invalid Action")
                 self.game_state['error'] = False
             choice = instruct_input("Restart Map? (Y/N): ").strip().upper()
-            if choice == 'Y':
+            if choice == 'Y' or choice == "!":
                 bool_check = True
                 break
             elif choice == 'N':
@@ -68,6 +70,7 @@ class Game:
             return True
         else:
             return False
+        
     def fetch_map(self):
         self.map = list()
         self.boulder_hidden_objects = dict()
@@ -92,6 +95,7 @@ class Game:
         self.map_rows = len(self.map)
         self.map_cols = len(self.map[0])
         return None
+    
     def display(self):
         clear_screen()
         self.show_entire_map()
@@ -105,6 +109,7 @@ class Game:
         print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
         print("\nTo reset map: [!]\nTo quit: [Q]")
         return None
+    
     def show_entire_map(self):
         print("\n--- Current Map ---\n")
         for row in self.map:
@@ -112,23 +117,24 @@ class Game:
             print("".join(emoji_display))
         print("---------------------")
         return None
+    
     def show_result(self):
         if self.mushroom_count['total'] == self.mushroom_count['collected']:
             clear_screen()
-            show_stage_clear()
+            show_stage_clear(self.map)
         elif self.game_state['drowning']:
             clear_screen()
-            show_game_over()
+            show_game_over(self.map)
         elif self.game_state['lost']:
             clear_screen()
-            show_game_over()
+            show_game_over(self.map)
         else:
             pass # Invalid; Not possible to get
         ...
 
 def choose_map():
     while True: 
-        map_name = instruct_input("Enter path of map (etc. Map1): ")
+        map_name = instruct_input("Enter name of map (etc. Map1): ")
         file_name = f"maps/{map_name}.txt"
         if check_existing_file(file_name):
             clear_screen()
@@ -136,6 +142,7 @@ def choose_map():
         else:
             clear_screen()
             print(f"File not found, try again")
+            
 def menu():
     ...
 

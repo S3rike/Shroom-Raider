@@ -8,6 +8,7 @@ import copy
 game_state = {'pickup':False, 'holding':False, 'game_over':False, 'move':1}
 mushroom_count = {'total':0, 'collected':0}
 tile = {'prev':'', 'curr':'', 'next':''} # tile states for map updating
+
 # rewrite aux functions
 def check_pickable_object(action, holding_item, hidden_object):
     return action == 'P' and holding_item == False and hidden_object in pickable_items
@@ -227,25 +228,31 @@ def reset_map(current_map, original_map):
     current_map = copy.deepcopy(original_map)
     return current_map
 
-def show_game_over():
+def show_game_over(game_map):
+    clear_screen()
     column = get_terminal_col_size()
-    # I commented this part since we need to display the game map and the amount of mushrooms collected
-    # clear_screen_helper()
     game_over_screen = game_over
     display_game_over = game_over_screen.splitlines()
-    # The issue with this is that it depends on the current terminal size
     for line in display_game_over:
         print(line.center(column))
+    print(f'However, you were able to collect {mushroom_count["collected"]} mushrooms!\n')
+    for row in game_map:
+        emoji_display = [tile_ui.get(tile, tile) for tile in row]
+        print(''.join(emoji_display))
 
-def show_stage_clear():
+def show_stage_clear(game_map):
+    clear_screen()
     column = get_terminal_col_size()
-    # I commented this part since we need to display the game map and the amount of mushrooms collected
-    # clear_screen_helper()
     stage_clear_screen = stage_clear
     display_stage_clear = stage_clear_screen.splitlines()
     # The issue with this is that it depends on the current terminal size
     for line in display_stage_clear:
         print(line.center(column))
+    print(f'You have collected all {mushroom_count['total']} mushrooms!\n')
+    for row in game_map:
+        emoji_display = [tile_ui.get(tile, tile) for tile in row]
+        print(''.join(emoji_display))
+    
 
 def exit_terminal():
     return sys.exit()
