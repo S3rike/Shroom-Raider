@@ -1,24 +1,68 @@
 <h1 align="center">
-<img src="icon/logo.png">
+<img src="assets/icon/logo.png">
 </h1>
 <p align="center">
 <i>Immortality isn't free, the forest holds the key.</i>
 </p>
 
-*Being mortal is boring!* You are **Laro Craft** an experienced adventurer that longs to experience a taste of immortality. According to the legends, there exists a special mushroom in the **Forest of Ei** that grants a person immortal life. However, the journey you will face won't be easy. You will have to collect as many mushrooms as you can using the items you can see in the wild. Are you willing to take on this **quest to eternity**?
+<p align="justify">
+<i>Being mortal is boring!</i> You are <b>Laro Craft</b> an experienced adventurer that longs to experience a taste of immortality. According to the legends, there exists a special mushroom in the <b>Forest of Ei</b> that grants a person immortal life. However, the journey you will face won't be easy. You will have to collect as many mushrooms as you can using the items you can see in the wild. Are you willing to take on this <b>quest to eternity</b>?
+</p>
 
 ## 📒 Table of Contents
-- [Installation](#-installation)
-    - [Installing Dependencies](#installing-dependencies)
-- [Tutorial](#📖-tutorial)
-    - [How should you play this game?](#🍄-goal)
+- [Installation Guide](#💾-installation-guide)
+    - [Install from Source](#▶️-install-from-source)
+    - [Installing Dependencies](#⬇️-installing-dependencies)
+- [User Manual](#📖-user-manual)
+    - [Objective](#🎯-objective)
     - [Movement System](#🏃‍♂️-movement-system)
-    - [Demonstration](#demonstration)
+- [Additional Features](#🎮-bonus-features)
+- [Code Structure](#📁-code-structure)
+- [Unit Testing](#🧪-unit-testing)
 
-## 💾 Installation
+## 💾 Installation Guide
 
-### Installing Dependencies
-To install the required dependencies, open your terminal and navigate to the directory where **Shroom Raider** is located.
+> ### Lengthy Guide Up Ahead
+>As you scroll through this guide, you may feel somewhat lazy to read all of them due to amount of options that we have laid down. For the sake of simplicity, we will put the options that are understandable in layman's terms in `Option 1` and put the more technical stuff (for installation) on the other options.
+
+### ▶️ Install from Source
+Let's get started! To install the game, there are two ways on how to do it:
+
+**Option 1: Download Zip**
+
+Clicking this [link](https://github.com/S3rike/Shroom-Raider/archive/refs/heads/main.zip) will automatically download the zip file of the repo. You may also opt to download the it in Github by clicking on `<> Code` which can found on the right corner and click on `Download Zip`.
+
+<p align="center">
+<img src="assets/images/download-zip.png" width="300">
+</p>
+
+**Option 2: Clone the Repository**
+
+***Note:*** This option is possible if and only if you have Git installed. For more information on how to git started ~~(pun intended)~~, check out this [link](https://github.com/git-guides/install-git) from Github.
+
+```bash
+git clone https://github.com/S3rike/Shroom-Raider.git
+```
+
+### ⬇️ Installing Dependencies
+To install the required dependencies, open your terminal and navigate to the directory where **Shroom Raider** is located
+
+```bash
+cd shroom-raider
+```
+
+You're so close to installing the game! However, your game is missing some content and you need to install them. You have two options on how to do so:
+
+**Option 1: Quick Installation**
+
+Just run the following command on your terminal, make sure that you are in the directory where Shroom Raider is located
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+**Option 2: Creating a Virtual Environment**
+> For more information on why you should use a virtual environment, feel free to check out this [link](https://stackoverflow.com/questions/41972261/what-is-a-virtualenv-and-why-should-i-use-one)!
 
 Create the virtual environment
 ```bash
@@ -43,26 +87,117 @@ pip install -r requirements.txt
 ```
 > Note that some modules may be need to be installed for Linux users.
 
-## 📖 Tutorial
+### 🎮 Starting the Game
+There are three ways on how you can start the game!
+
+**Option 1: Run Game**
+
+The first option allows you to run the main game and get familiar with how the game works. If this is you're **first time playing**, it is recommended you do this first!
+
+```bash
+python3 shroom_raider.py
+
+# or
+python3 -m shroom_raider
+```
+
+**Option 2: Play Specific Map**
+
+The second option allows you to **choose a map** from `maps/` and play that particular map!
+
+```bash
+python3 shroom_raider.py -f <stage_file>
+
+# or
+python3 -m shroom_raider -f <stage_file>
+```
+
+Example:
+
+```bash
+python3 shroom_raider.py -f "maps/map1.txt"
+```
+
+**Option 3: Automate the Game**
+
+If you like to **premove**, then this option is for you! This option allows you to pick a particular map and play the game using a string of moves and view the final state of the game in another file (you get to name your output file).
+
+```bash
+python3 shroom_raider.py -f <stage_file> -m <string_of_moves> -o <output_file>
+
+# or
+python3 -m shroom_raider -f <stage_file> -m <string_of_moves> -o <output_file>
+```
+
+Example:
+
+```bash
+python3 shroom_raider.py -f "maps/map1.txt" -m "WASD" -o "output.txt"
+```
+
+## 📖 User Manual
 This tutorial aims to guide new players on the mechanics of **Shroom Raider**. If you have played this game before, feel free to skip this part!
 
-### 🍄 Goal
-The aim of the game is to collect all the **mushrooms** you can see while having fun!
+### 🎯 Objective
+**The Forest of Ei has no beginning and has no end.** It is a place between the living and the dead. Once you set foot, there's no turning back. The mushrooms that promise immortality thrive in this place, thanks to the souls that never found their way back. Gather **sixty-seven mushrooms** and immortality shall be yours. 
+
+Or, if can no longer bear the pains the forest brings, the **Pond of Lethe** awaits you. Stare into your reflection, and the gods will help you forget your pain. Death is not a lovely ending, nor is it a sorrowful beginning. It is *nostalgic*.
+> *Nostalgia* comes from the Greek words *nostos* (homecoming) and *algos* (pain). *Your psyche aches to return to their home.*
+
 
 ### 🏃‍♂️ Movement System
-Shown below is the list of possible moves that a user can do and their corresponding keybinds.
+Shown below is the list of possible moves that a user can do and their corresponding keybinds. Do note that the **keybinds are case-insensitive** (lowercase and uppercase does the same move)!
 
-| Move              | Keybind  | 
-| :---------------- | :------: |
-| Move up           | W or w   |
-| Move down         | S or s   |
-| Move left         | A or a   |
-| Move right        | D or d   |
-| Pickup item       | P or p   |
-| Reset stage       | !        |
-| Quit game         | Q or q   |
+| Keybind    | Action        | 
+| :--------: | ------------- |
+| W          | Move up       |
+| A          | Move left     |
+| S          | Move down     |
+| D          | Move right    |
+| P          | Pick up item  |
+| !          | Reset stage   |
+| Q          | Quit game     |
 
-### Demonstration
-#### Collecting a Mushroom
-Mushrooms
+## ⚙️ Mechanics
+### ⛏️ Tiles and Items
+Shown below are the list of tiles and items that you may encounter in the forest alongside their descriptions.
 
+| UI Symbol   | ASCII  | Name              | Description                                            |
+|:----------: |:------:|------------------ |------------------------------------------------------- |
+| 🧑         | L      | **Laro Craft**     | It's you! The one seeking immortality!                 |
+| '　'        | .      | **Empty Tile**    | You can move to empty tiles.                           |
+| 🌲         | T      | **Tree**          | A natural obstacle; can be burned or cut down          |
+| 🍄         | +      | **Mushroom**      | Collect these to become immortal                       |
+| 🪨         | R      | **Rock**          | Can be pushed into empty tiles, paved tiles, or water  |
+| 🟦         | ~      | **Water**         | Step here and end your journey                         |
+| ⬜         | -      | **Paved Tile**    | Safe path formed when rock falls into water            |
+| 🪓         | x      | **Axe**           | Used to cut down trees (single use)                    |
+| 🔥         | *      | **Flamethrower**  | Burns adjacent trees (single use)                      |
+
+## 👾 Bonus Features
+For more information regarding the additional features, click here...
+
+
+## 📁 Code Structure
+Shown below is the code structure (subject to change)
+```bash
+├───assets
+│   └───__pycache__
+├───icon
+├───maps
+│   └───tutorial
+│       ├───items
+│       └───tiles
+└───__pycache__
+```
+
+## 🧪 Unit Testing
+Add a detailed description of unit tests, how they can run, and how to add new tests
+
+
+
+<!-- ## 👥 About Us
+**Developed by:**
+* Camiña, Jeffrey 
+* Oh, Enzo
+* Soliva, Edgar -->
