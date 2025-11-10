@@ -15,19 +15,22 @@ def choose_map():
     while True:
         clear_screen()
         show_list_maps()
-        print(f'[R] To Refresh List')
+        print(f'[R] To Refresh List       [Q] To Quit Game')
         if bool_invalid_input:
             print(f"File Not found, Try Again")
         map_name = instruct_input("Enter Name Of Map: ")
         if map_name.upper() == 'R':
             bool_invalid_input = False
             continue
-        file_name = f"maps/{map_name}.txt"
-        if check_existing_file(file_name):
+        elif map_name.upper() == 'R':
             clear_screen()
-            return map_name        
         else:
-            bool_invalid_input = True
+            file_name = f"maps/{map_name}.txt"
+            if check_existing_file(file_name):
+                clear_screen()
+                return map_name        
+            else:
+                bool_invalid_input = True
 def show_list_maps():
     curr_directory = os.getcwd()
     peek_folder = f'{curr_directory}/maps'
