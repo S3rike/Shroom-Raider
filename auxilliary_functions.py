@@ -31,7 +31,6 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
         to_col = dest_col - curr_col
         rock_dest_row = dest_row + to_row # where will rock go
         rock_dest_col = dest_col + to_col
-
         if pos_in_bounds(len(session.map), len(session.map[0]), rock_dest_row, rock_dest_col): # rock in bounds
             rock_dest_tile = session.map[rock_dest_row][rock_dest_col]
             # If the tile the rock is moving to is valid
@@ -53,6 +52,8 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
             session.game_state['error'] = True
     elif dest_tile == '~':
         session.game_state['drowning'] = True
+        session.map[curr_row][curr_col] = session.player_hidden_object
+        session.player_hidden_object = '.'
     elif dest_tile == 'T':
         if session.game_state['holding']:
             use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
