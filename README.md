@@ -176,7 +176,8 @@ Shown below are the list of tiles and items that you may encounter in the forest
 
 ### Demonstration
 **Using an Axe**
-<!--https://private-user-images.githubusercontent.com/71861992/512157104-af3a4392-8d2d-4512-90ad-0d50f0ac465f.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjI3Nzk2OTcsIm5iZiI6MTc2Mjc3OTM5NywicGF0aCI6Ii83MTg2MTk5Mi81MTIxNTcxMDQtYWYzYTQzOTItOGQyZC00NTEyLTkwYWQtMGQ1MGYwYWM0NjVmLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTEwVDEyNTYzN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI4NmU2NDU2MzNlOWQxM2JiYmQ1MjEzZmIxMzc0NTQzNGFkYzY3NmFlYmE3NmE1NTQ0YzYyZTQxZjZkZTYxZTYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.parSyp3UJsbdMFVC2wwVlHvtI4zj6jTNYEEVN2Dg9s8-->
+
+<!-- https://github.com/user-attachments/assets/af3a4392-8d2d-4512-90ad-0d50f0ac465f -->
 
 **Using a Flamethrower**
 <video src="assets/videos/flamethrower-demo.mp4"></video>
