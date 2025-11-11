@@ -197,6 +197,9 @@ def get_operating_system():
     return os.name
 def get_current_directory():
     return os.getcwd()
+def create_directory(name):
+    os.mkdir(name)
+    return None
 def get_joint_path(*paths):
     file = ""
     for line in paths:

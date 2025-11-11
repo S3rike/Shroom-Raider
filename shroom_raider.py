@@ -68,7 +68,11 @@ class Game:
         return None
     # Saves Game State To A txt File
     def save_game(self):
-        file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}.txt", 'w')
+        try:
+            file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}.txt", 'w')
+        except FileNotFoundError:
+            create_directory("saved_states")
+            file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}.txt", 'w')
         file.write(f"{self.map_rows} {self.map_cols}\n")
         file.write(f"{self.player_coords['row']} {self.player_coords['col']}\n")
         file.write(f"{self.player_held_item} {self.player_hidden_object}\n")
