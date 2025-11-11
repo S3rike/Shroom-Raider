@@ -16,8 +16,10 @@ class Game:
         self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
         self.debug = None
         self.restart_game = True
+        self.latest_action = None
     # Basically int(main) 
     def run_game(self):
+        
         self.initial_session()
         while self.restart_game:
             self.save_game()
@@ -159,6 +161,7 @@ class Game:
             print(f"Invalid Action")
             self.game_state['error'] = False
         actions = instruct_input("Enter your next action: ").upper()
+        self.latest_action = None
         for action in actions:
             # Found in auxilliary_functions
             if check_game_over(self):
@@ -169,6 +172,7 @@ class Game:
                 self.game_state['holding'] = True
                 self.player_held_item = self.player_hidden_object
                 self.player_hidden_object = '.'
+                self.latest_action = 'pick'
             elif action in ("W", "A", "S", "D"):
                 # Found in auxilliary_functions
                 dest_row, dest_col = new_pos(action, self.player_coords['row'], self.player_coords['col'])
@@ -177,11 +181,15 @@ class Game:
                 exit_terminal()
             elif action == "!":
                 self.fetch_map()
+                self.latest_action = None
             elif action == 'F':
                 self.save_game()
+                self.latest_action = None
             else:
                 print(f"Invalid Action Found: {action}")
                 break
+        if self.latest_action and not check_game_over(self):
+            related_sound(self.latest_action)
         return None
     # Shows Possible Ending Game States
     def show_result(self):
