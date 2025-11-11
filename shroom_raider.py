@@ -19,7 +19,6 @@ class Game:
         self.latest_action = None
     # Basically int(main) 
     def run_game(self):
-        
         self.initial_session()
         while self.restart_game:
             self.save_game()

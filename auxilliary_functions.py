@@ -14,7 +14,6 @@ def related_sound(action_type):
     'water': 'fall_water_pixabay.mp3', # not sure if needed
     'push': 'rock_push_pixabay.wav',
     'game_over': 'game_over_pixabay.mp3', 
-    'menu': 'menu_music_pixabay.wav',
     'win': 'win_pixabay.mp3' 
 }
     if action_type in sounds.keys():
@@ -22,7 +21,7 @@ def related_sound(action_type):
 
 # Functions For User Choosing Maps
 def choose_map():
-    related_sound('menu')
+    sound = playsound("assets/audio/menu_music_pixabay.wav", block=False)
     bool_invalid_input = False
     while True:
         clear_screen()
@@ -39,6 +38,7 @@ def choose_map():
         else:
             file_name = f"maps/{map_name}.txt"
             if check_existing_file(file_name):
+                sound.stop()
                 clear_screen()
                 return map_name        
             else:
