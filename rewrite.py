@@ -15,14 +15,12 @@ class Game:
         self.debug = None
         self.restart_game = True
     def run_game(self):
+        self.initial_session()
         while self.restart_game:
-            self.fetch_map()
             self.play_game()
             self.show_result()
             self.restart_game = self.restart()
-            self.fetch_map()
         return None
-
     def fetch_map(self):
         self.map = list()
         self.boulder_hidden_objects = dict()
@@ -82,6 +80,8 @@ class Game:
                 exit_terminal()
             elif action == "!":
                 self.fetch_map()
+            elif action == 'F':
+                self.save_game()
             else:
                 print(f"Invalid Action Found: {action}")
                 break
@@ -151,7 +151,7 @@ class Game:
         else:
             print(f'You currently do not have an item!')
         print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
-        print("\nTo reset map: [!]\nTo quit: [Q]")
+        print(f"\nTo Reset: [!]  To Quit: [Q]  To Save: [F]")
         return None
     def restart(self):
         return self.get_bool_input("Restart Map? (Y/N): ")
