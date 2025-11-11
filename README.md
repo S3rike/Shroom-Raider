@@ -1,5 +1,5 @@
 <h1 align="center">
-<img src="assets/icon/logo.png">
+<img src="assets/icon/cover.png">
 </h1>
 <p align="center">
 <i>Immortality isn't free, the forest holds the key.</i>
@@ -10,15 +10,19 @@
 </p>
 
 ## 📒 Table of Contents
-- [Installation Guide](#💾-installation-guide)
-    - [Install from Source](#▶️-install-from-source)
-    - [Installing Dependencies](#⬇️-installing-dependencies)
-- [User Manual](#📖-user-manual)
-    - [Objective](#🎯-objective)
-    - [Movement System](#🏃‍♂️-movement-system)
-- [Additional Features](#🎮-bonus-features)
-- [Code Structure](#📁-code-structure)
-- [Unit Testing](#🧪-unit-testing)
+- [💾 Installation Guide](#-installation-guide)
+  - [▶️ Install from Source](#️-install-from-source)
+  - [⬇️ Installing Dependencies](#️-installing-dependencies)
+  - [🎮 Starting the Game](#-starting-the-game)
+- [📖 User Manual](#-user-manual)
+  - [🎯 Objective](#-objective)
+  - [🏃‍♂️ Movement System](#️-movement-system)
+- [⚙️ Mechanics](#️-mechanics)
+  - [⛏️ Tiles and Items](#️-tiles-and-items)
+  - [🔍 Demonstration](#-demonstration)
+- [👾 Bonus Features](#-bonus-features)
+- [📁 Code Structure](#-code-structure)
+- [🧪 Unit Testing](#-unit-testing)
 
 ## 💾 Installation Guide
 
@@ -166,13 +170,29 @@ Shown below are the list of tiles and items that you may encounter in the forest
 |:----------: |:------:|------------------ |------------------------------------------------------- |
 | 🧑         | L      | **Laro Craft**     | It's you! The one seeking immortality!                 |
 | '　'        | .      | **Empty Tile**    | You can move to empty tiles.                           |
-| 🌲         | T      | **Tree**          | A natural obstacle; can be burned or cut down          |
-| 🍄         | +      | **Mushroom**      | Collect these to become immortal                       |
-| 🪨         | R      | **Rock**          | Can be pushed into empty tiles, paved tiles, or water  |
-| 🟦         | ~      | **Water**         | Step here and end your journey                         |
-| ⬜         | -      | **Paved Tile**    | Safe path formed when rock falls into water            |
-| 🪓         | x      | **Axe**           | Used to cut down trees (single use)                    |
-| 🔥         | *      | **Flamethrower**  | Burns adjacent trees (single use)                      |
+| 🌲         | T      | **Tree**          | You can cut down or burn these obstacles.              |
+| 🍄         | +      | **Mushroom**      | Collect these to become immortal!                      |
+| 🪨         | R      | **Rock**          | Can be pushed into empty tiles, paved tiles, or water. |
+| 🟦         | ~      | **Water**         | A place for reflection or to forget your memories.     |
+| ⬜         | -      | **Paved Tile**    | Formed when a rock is pushed into the water.           |
+| 🪓         | x      | **Axe**           | Used to cut down trees (single use).                   |
+| 🔥         | *      | **Flamethrower**  | Burns adjacent trees (single use).                     |
+
+### 🔍 Demonstration
+Shown below are some videos on how each item works! 
+
+**🪓 Using an Axe**
+
+An axe allows you to cut down a tree that you can see in your way! Just move to the direction of the tree and it shall disappear. However, do note that this is a **single-use** item, so use it wisely!
+
+https://github.com/user-attachments/assets/af3a4392-8d2d-4512-90ad-0d50f0ac465f
+
+**🔥 Using a Flamethrower**
+
+If you've encountered this item, be careful to not burn your hands! This item allows you to burn down adjacent (those that share a common vertex) trees. This is also a **single-use** item, so be careful not to waste this!
+
+https://github.com/user-attachments/assets/0a18b67c-18d9-4884-a941-688cf96321e6
+
 
 ## 👾 Bonus Features
 For more information regarding the additional features, click here...
@@ -194,7 +214,7 @@ Shown below is the code structure (subject to change)
 ## 🧪 Unit Testing
 Add a detailed description of unit tests, how they can run, and how to add new tests
 
-## Resources
+
 
 <!-- ## 👥 About Us
 **Developed by:**
