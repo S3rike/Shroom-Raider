@@ -132,7 +132,6 @@ class Game:
             self.display()
             self.player_input()
             if check_game_over(self):
-                self.save_game()
                 break
         return None
     # Main Sreen During Session
