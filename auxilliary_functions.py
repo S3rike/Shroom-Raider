@@ -14,10 +14,10 @@ def related_sound(action_type):
     'water': 'fall_water_pixabay.mp3', # not sure if needed
     'push': 'rock_push_pixabay.wav',
     'game_over': 'game_over_pixabay.mp3', 
-    'win': 'win_pixabay.mp3' 
-}
+    'win': 'win_pixabay.mp3' }
     if action_type in sounds.keys():
         playsound(f"assets/audio/{sounds[action_type]}", block=False)
+    return None
 
 # Functions For User Choosing Maps
 def choose_map():
