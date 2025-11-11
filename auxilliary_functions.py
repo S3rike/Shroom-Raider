@@ -32,8 +32,8 @@ def choose_map():
             else:
                 bool_invalid_input = True
 def show_list_maps():
-    curr_directory = os.getcwd()
-    peek_folder = f'{curr_directory}/maps'
+    curr_directory = get_current_directory()
+    peek_folder = get_joint_path(curr_directory, 'maps')
     map_list = [file.strip('.txt') for file in os.listdir(peek_folder) if os.path.isfile(os.path.join(peek_folder, file))]
     map_count = len(map_list)
     print(f"-------- Available Maps --------")
@@ -325,7 +325,10 @@ def instruct_input(input_text):
 
 def get_operating_system():
     return os.name
-
+def get_current_directory():
+    return os.getcwd()
+def get_joint_path(*paths):
+    return os.path.join(paths)
 def check_existing_file(file_name):
     return os.path.exists(file_name)
 
