@@ -87,7 +87,7 @@ class Game:
                 break
         return None
     def initial_session(self):
-        save_file = get_joint_path(get_current_directory, f'{self.file_name[0::2]}{self.file_name[1::2]}')
+        save_file = get_joint_path(get_current_directory(), f'{self.file_name[0::2]}{self.file_name[1::2]}')
         self.debug = save_file
         bool_check = False
         if check_existing_file(save_file):
