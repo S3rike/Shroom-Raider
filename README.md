@@ -1,5 +1,5 @@
 <h1 align="center">
-<img src="assets/icon/logo.png">
+<img src="assets/icon/cover.png">
 </h1>
 <p align="center">
 <i>Immortality isn't free, the forest holds the key.</i>
