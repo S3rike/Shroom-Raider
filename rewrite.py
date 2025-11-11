@@ -20,6 +20,7 @@ class Game:
             self.play_game()
             self.show_result()
             self.restart_game = self.restart()
+            self.fetch_map()
         return None
 
     def fetch_map(self):
@@ -58,6 +59,7 @@ class Game:
             return None
         if self.debug != None:
             print(self.debug)
+            self.debug = None
         if self.game_state['error']:
             print(f"Invalid Action")
             self.game_state['error'] = False
@@ -84,6 +86,20 @@ class Game:
                 print(f"Invalid Action Found: {action}")
                 break
         return None
+    def initial_session(self):
+        save_file = get_joint_path(get_current_directory, f'{self.file_name[0::2]}{self.file_name[1::2]}')
+        self.debug = save_file
+        bool_check = False
+        if check_existing_file(save_file):
+            bool_check = self.get_bool_input(f'Save File Detected.\nRun Save [Y/N]:')
+        try:
+            if bool_check:
+                self.fetch_save()
+            else:
+                self.fetch_map()
+        except:
+            self.debug(f'Save File Is Corrupted. Loading Base Map')
+            self.fetch_map()
     def save_game(self):
         file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}", 'w')
         file.write(f"{self.map_rows} {self.map_cols}")
@@ -138,11 +154,13 @@ class Game:
         print("\nTo reset map: [!]\nTo quit: [Q]")
         return None
     def restart(self):
+        return self.get_bool_input("Restart Map? (Y/N): ")
+    def get_bool_input(self, instruct):
         while True:
             if self.game_state['error']:
                 print(f"Invalid Action")
                 self.game_state['error'] = False
-            choice = instruct_input("Restart Map? (Y/N): ").strip().upper()
+            choice = instruct_input(instruct).strip().upper()
             if choice == 'Y' or choice == "!":
                 bool_check = True
                 break
