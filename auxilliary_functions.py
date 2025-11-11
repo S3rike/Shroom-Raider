@@ -1,11 +1,27 @@
 # Imports From Standard Libraries And Assets Used
 from assets.final_state import *
 from assets.tile_tags import *
+from playsound3 import playsound
 import os
 import sys
 
+def related_sound(action_type):
+    sounds = {
+    'pick': 'pickup_pixabay.mp3',
+    'move': 'footstep_short_mixkit.wav',
+    'cut': 'treecut_pixabay.wav',
+    'burn': 'treeburn_pixabay.wav',
+    'water': 'fall_water_pixabay.mp3', # not sure if needed
+    'push': 'rock_push_pixabay.wav',
+    'game_over': 'game_over_pixabay.mp3', 
+    'win': 'win_pixabay.mp3' 
+}
+    if action_type in sounds.keys():
+        playsound(f"assets/audio/{sounds[action_type]}", block=False)
+
 # Functions For User Choosing Maps
 def choose_map():
+    sound = playsound("assets/audio/menu_music_pixabay.wav", block=False)
     bool_invalid_input = False
     while True:
         clear_screen()
@@ -22,10 +38,12 @@ def choose_map():
         else:
             file_name = f"maps/{map_name}.txt"
             if check_existing_file(file_name):
+                sound.stop()
                 clear_screen()
                 return map_name        
             else:
                 bool_invalid_input = True
+
 def show_list_maps():
     curr_directory = get_current_directory()
     peek_folder = get_joint_path(curr_directory, 'maps')
@@ -36,27 +54,35 @@ def show_list_maps():
         print(f"{map_list[index]}   {map_list[index + 1]}   {map_list[index + 2]}")
     print(f"--------------------------------\n")
     return None
+
 # Checks For Valid Inputs
 def check_pickable_object(action, holding_item, hidden_object):
     return action == 'P' and holding_item == False and hidden_object in pickable_items
+
 def check_game_over(session):
     bool_check1 = session.mushroom_count['total'] == session.mushroom_count['collected']
     bool_check2 = session.game_state['drowning']
     bool_check3 = session.game_state['lost']
     return bool_check1 or bool_check2 or bool_check3
+
 def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest means destination
     if pos_in_bounds(session.map_rows, session.map_cols, dest_row, dest_col):
         dest_tile = session.map[dest_row][dest_col]
     else:
         session.game_state['lost'] = True
         session.map[curr_row][curr_col] = session.player_hidden_object
+        session.latest_action = 'water'
         return None
     if dest_tile in movable_tiles:
         if dest_tile == '+':
             session.mushroom_count['collected'] += 1
             dest_tile = '.'
+            session.latest_action = 'pick'
+        else:
+            session.latest_action = 'move'
         modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
     elif dest_tile in pickable_items.keys():
+        session.latest_action = 'move'
         modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
     elif dest_tile in adjustable_tiles:
         to_row = dest_row - curr_row # directions of player
@@ -71,6 +97,7 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
                 session.map[rock_dest_row][rock_dest_col] = dest_tile
                 dest_tile = session.boulder_hidden_objects[(dest_row, dest_col)]
                 session.boulder_hidden_objects.pop((dest_row, dest_col))
+                session.latest_action = 'push'
                 modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
             elif rock_dest_tile == '~':
                 session.map[rock_dest_row][rock_dest_col] = '-' # replace water
@@ -83,6 +110,7 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
         else:
             session.game_state['error'] = True
     elif dest_tile == '~':
+        session.latest_action = 'water'
         session.game_state['drowning'] = True
         session.map[curr_row][curr_col] = session.player_hidden_object
         session.player_hidden_object = '.'
@@ -95,13 +123,16 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
     else:
         pass #invalid but definitely will not be used
     return None
+
 # Using Items
 def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     if session.player_held_item == 'x':
         dest_tile = '.'
+        session.latest_action = 'cut'
         modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
     elif session.player_held_item == '*':
         burn_adj_trees(session, dest_row, dest_col)
+        session.latest_action = 'burn'
         session.map[curr_row][curr_col] = session.player_hidden_object
         session.map[dest_row][dest_col] = 'L'
         session.player_coords['row'] = dest_row
@@ -111,6 +142,7 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.player_held_item = None
     session.game_state['holding'] = False
     return None
+
 # Flamethrower Functions
 def burn_adj_trees(session, row, col):
     burn_stack = [(row, col)]
@@ -120,6 +152,7 @@ def burn_adj_trees(session, row, col):
         session.map[tree_row][tree_col] = '.'
         checked_tiles.add((tree_row, tree_col))
         burn_stack.extend(tuple(check_adj_trees(session, tree_row, tree_col)))
+
 def check_adj_trees(session, row, col):
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
     for shift_row, shift_col in directions:
@@ -128,6 +161,7 @@ def check_adj_trees(session, row, col):
         if pos_in_bounds(session.map_rows, session.map_cols, dest_row, dest_col):
             if session.map[dest_row][dest_col] == 'T':
                 yield (dest_row, dest_col)
+
 # Movement methods due to being redundant
 def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[curr_row][curr_col] = session.player_hidden_object
@@ -148,6 +182,7 @@ def new_pos(action, player_row, player_col):
     elif action == 'D':
         dest_col += 1
     return dest_row, dest_col
+
 # Showing Game Ending Displays
 def show_entire_map(session):
     print("\n--- Current Map ---\n")
@@ -156,7 +191,9 @@ def show_entire_map(session):
         print("".join(emoji_display))
     print("---------------------")
     return None
+
 def show_game_over(map, mushroom_count):
+    related_sound('game_over')
     clear_screen()
     column = get_terminal_col_size()
     game_over_screen = game_over
@@ -167,7 +204,9 @@ def show_game_over(map, mushroom_count):
     for row in map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
+
 def show_stage_clear(map, mushroom_count):
+    related_sound('win')
     clear_screen()
     column = get_terminal_col_size()
     stage_clear_screen = stage_clear
@@ -211,6 +250,7 @@ def get_terminal_col_size():
     return os.get_terminal_size()[0]
 def os_command(command):
     return os.system(command)
+
 # What Will Happen If User Runs This File
 def error():
     '''
