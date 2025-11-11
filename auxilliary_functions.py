@@ -328,7 +328,10 @@ def get_operating_system():
 def get_current_directory():
     return os.getcwd()
 def get_joint_path(*paths):
-    return os.path.join(paths)
+    path = ""
+    for line in paths:
+        path = os.path.join(path, line)
+    return path
 def check_existing_file(file_name):
     return os.path.exists(file_name)
 
