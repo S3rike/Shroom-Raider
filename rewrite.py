@@ -99,6 +99,31 @@ class Game:
             file.write(boulder_coords)
         file.close()
         return None
+    def fetch_save(self):
+        self.map = list()
+        self.boulder_hidden_objects = dict()
+        file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}", 'rt')
+        for row, line in enumerate(file):
+            if row == 0:
+                self.map_rows, self.map_cols = map(int, line.strip().split(" "))
+            elif row == 1:
+                self.player_coords['row'], self.player_coords['col'] = map(int, line.strip().split(" "))
+            elif row == 2:
+                self.player_held_item, self.player_hidden_object = line.strip().split(" ")
+            elif row == 3:
+                self.mushroom_count['total'], self.mushroom_count['collected'] = map(int, line.strip().split(" "))
+            elif row == 4:
+                self.game_state['holding'], self.game_state['drowning'] = line.strip().split(" ")
+            elif row == 5:
+                self.game_state['lost'], self.game_state['error'] = line.strip().split(" ")
+            elif row == 6:
+                self.restart_game = line.strip()
+            elif 7 <= row <= self.map_rows + 6:
+                self.map.append(line)
+            else:
+                self.boulder_hidden_objects.update(line.strip())
+        file.close()
+        return None
     def display(self):
         clear_screen()
         show_entire_map(self)
