@@ -14,6 +14,7 @@ class Game:
         self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
         self.debug = None
         self.restart_game = True
+
     def run_game(self):
         while self.restart_game:
             self.fetch_map()
@@ -46,6 +47,7 @@ class Game:
         self.map_rows = len(self.map)
         self.map_cols = len(self.map[0]) - 1
         return None
+    
     def play_game(self):
         while True:
             self.display()
@@ -53,6 +55,7 @@ class Game:
             if check_game_over(self):
                 break
         return None
+    
     def player_input(self):
         if self.debug != None:
             print(self.debug)
@@ -82,6 +85,26 @@ class Game:
                 print(f"Invalid Action Found: {action}")
                 break
         return None
+<<<<<<< Updated upstream
+=======
+    
+    def save_game(self):
+        file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}", 'w')
+        file.write(f"{self.map_rows} {self.map_cols}")
+        file.write(f"{self.player_coords['row']} {self.player_coords['col']}")
+        file.write(f"{self.player_held_item} {self.player_hidden_object}")
+        file.write(f"{self.mushroom_count['total']} {self.mushroom_count['collected']}")
+        file.write(f"{self.game_state['holding']} {self.game_state['drowning']}")
+        file.write(f"{self.game_state['lost']} {self.game_state['error']}")
+        file.write(f"{self.restart_game}")
+        for tile_line in self.map:
+            file.write(tile_line.strip())
+        for boulder_coords in self.boulder_hidden_objects.items():
+            file.write(boulder_coords)
+        file.close()
+        return None
+    
+>>>>>>> Stashed changes
     def display(self):
         clear_screen()
         show_entire_map(self)
@@ -95,6 +118,7 @@ class Game:
         print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
         print("\nTo reset map: [!]\nTo quit: [Q]")
         return None
+    
     def restart(self):
         while True:
             if self.game_state['error']:
@@ -113,6 +137,7 @@ class Game:
             return True
         else:
             return False
+        
     def show_result(self):
         if self.mushroom_count['total'] == self.mushroom_count['collected']:
             clear_screen()

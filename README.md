@@ -194,7 +194,7 @@ Shown below is the code structure (subject to change)
 ## 🧪 Unit Testing
 Add a detailed description of unit tests, how they can run, and how to add new tests
 
-
+## Resources
 
 <!-- ## 👥 About Us
 **Developed by:**
