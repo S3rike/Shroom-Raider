@@ -50,6 +50,7 @@ class Game:
             self.display()
             self.player_input()
             if check_game_over(self):
+                self.save_game()
                 break
         return None
     def player_input(self):
@@ -88,7 +89,6 @@ class Game:
         return None
     def initial_session(self):
         save_file = get_joint_path(get_current_directory(), f'{self.file_name[0::2]}{self.file_name[1::2]}')
-        self.debug = save_file
         bool_check = False
         if check_existing_file(save_file):
             bool_check = self.get_bool_input(f'Save File Detected.\nRun Save [Y/N]:')
@@ -102,17 +102,23 @@ class Game:
             self.fetch_map()
     def save_game(self):
         file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}", 'w')
-        file.write(f"{self.map_rows} {self.map_cols}")
-        file.write(f"{self.player_coords['row']} {self.player_coords['col']}")
-        file.write(f"{self.player_held_item} {self.player_hidden_object}")
-        file.write(f"{self.mushroom_count['total']} {self.mushroom_count['collected']}")
-        file.write(f"{self.game_state['holding']} {self.game_state['drowning']}")
-        file.write(f"{self.game_state['lost']} {self.game_state['error']}")
-        file.write(f"{self.restart_game}")
+        file.write(f"{self.map_rows} {self.map_cols}\n")
+        file.write(f"{self.player_coords['row']} {self.player_coords['col']}\n")
+        file.write(f"{self.player_held_item} {self.player_hidden_object}\n")
+        file.write(f"{self.mushroom_count['total']} {self.mushroom_count['collected']}\n")
+        file.write(f"{self.game_state['holding']} {self.game_state['drowning']}\n")
+        file.write(f"{self.game_state['lost']} {self.game_state['error']}\n")
+        file.write(f"{self.restart_game}\n")
         for tile_line in self.map:
-            file.write(tile_line.strip())
+            row = tile_line[0]
+            for char in tile_line[1:-1]:
+                row = f'{row} {char}' 
+            row = f'{row} \n'
+            file.write(row)
         for boulder_coords in self.boulder_hidden_objects.items():
-            file.write(boulder_coords)
+            loc, char = boulder_coords
+            x, y = loc
+            file.write(f'{x} {y} {char}\n')
         file.close()
         return None
     def fetch_save(self):
@@ -135,10 +141,12 @@ class Game:
             elif row == 6:
                 self.restart_game = line.strip()
             elif 7 <= row <= self.map_rows + 6:
-                self.map.append(line)
+                self.map.append(list(line.split(" ")))
             else:
-                self.boulder_hidden_objects.update(line.strip())
+                x, y, char = line.strip().split(' ')
+                self.boulder_hidden_objects.update(((int(x),int(y)), char))
         file.close()
+        self.debug = self.map
         return None
     def display(self):
         clear_screen()
@@ -154,7 +162,12 @@ class Game:
         print(f"\nTo Reset: [!]  To Quit: [Q]  To Save: [F]")
         return None
     def restart(self):
-        return self.get_bool_input("Restart Map? (Y/N): ")
+        user_input = self.get_bool_input("Restart Map? (Y/N): ")
+        if user_input:
+            self.fetch_map()
+        else:
+            pass
+        return user_input
     def get_bool_input(self, instruct):
         while True:
             if self.game_state['error']:
