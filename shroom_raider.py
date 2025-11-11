@@ -224,12 +224,8 @@ class Game:
         if bool_check:
             return True
         else:
-            return False         
-def menu():
-    ...
+            return False        
 if __name__ == "__main__":
     while True:
-        menu()
         session = Game(choose_map())
         session.run_game()
-    ...

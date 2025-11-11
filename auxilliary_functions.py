@@ -33,7 +33,12 @@ def show_list_maps():
     map_count = len(map_list)
     print(f"-------- Available Maps --------")
     for index in range(0, map_count,3):
-        print(f"{map_list[index]}   {map_list[index + 1]}   {map_list[index + 2]}")
+        if map_count - index == 2:
+            print(f"{map_list[index]}   {map_list[index + 1]}")
+        elif map_count - index == 1:
+            print(f"{map_list[index]}")
+        else:
+            print(f"{map_list[index]}   {map_list[index + 1]}   {map_list[index + 2]}")
     print(f"--------------------------------\n")
     return None
 # Checks For Valid Inputs
