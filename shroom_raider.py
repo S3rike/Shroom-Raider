@@ -188,7 +188,7 @@ class Game:
                 print(f"Invalid Action Found: {action}")
                 break
         if self.latest_action and not check_game_over(self):
-            related_sound(self.latest_action)
+            play_sound(self.latest_action)
         return None
     # Shows Possible Ending Game States
     def show_result(self):

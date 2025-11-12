@@ -1,34 +1,31 @@
 # Imports From Standard Libraries And Assets Used
 from assets.final_state import *
 from assets.tile_tags import *
+from assets.sound_paths import *
 from playsound3 import playsound
 import os
 import sys
 
-def related_sound(action_type):
-    sounds = {
-    'pick': 'pickup_pixabay.mp3',
-    'move': 'footstep_short_mixkit.wav',
-    'cut': 'treecut_pixabay.wav',
-    'burn': 'treeburn_pixabay.wav',
-    'water': 'fall_water_pixabay.mp3', # not sure if needed
-    'push': 'rock_push_pixabay.wav',
-    'game_over': 'game_over_pixabay.mp3', 
-    'win': 'win_pixabay.mp3' }
-    if action_type in sounds.keys():
-        playsound(f"assets/audio/{sounds[action_type]}", block=False)
+def play_sound(action_type):
+    try:
+        return playsound(f"assets/audio/{sound_files[action_type]}", block=False)
+    except:
+        return None
+def stop_sound(curr_playing):
+    if curr_playing != None:
+        curr_playing.stop()
     return None
 
 # Functions For User Choosing Maps
 def choose_map():
-    sound = playsound("assets/audio/menu_music_pixabay.wav", block=False)
+    curr_playing = play_sound('menu')
     bool_invalid_input = False
     while True:
         clear_screen()
         show_list_maps()
         print(f'[R] To Refresh List       [Q] To Quit Game')
-        if bool_invalid_input:
-            print(f"File Not found, Try Again")
+        if curr_playing == None: print(f"Audio Backend Not Available")
+        if bool_invalid_input: print(f"File Not found, Try Again")
         map_name = instruct_input("Enter Name Of Map: ")
         if map_name.upper() == 'R':
             bool_invalid_input = False
@@ -38,7 +35,7 @@ def choose_map():
         else:
             file_name = f"maps/{map_name}.txt"
             if check_existing_file(file_name):
-                sound.stop()
+                stop_sound(curr_playing)
                 clear_screen()
                 return map_name        
             else:
@@ -193,7 +190,7 @@ def show_entire_map(session):
     return None
 
 def show_game_over(map, mushroom_count):
-    related_sound('game_over')
+    play_sound('game_over')
     clear_screen()
     column = get_terminal_col_size()
     game_over_screen = game_over
@@ -206,7 +203,7 @@ def show_game_over(map, mushroom_count):
         print(''.join(emoji_display))
 
 def show_stage_clear(map, mushroom_count):
-    related_sound('win')
+    play_sound('win')
     clear_screen()
     column = get_terminal_col_size()
     stage_clear_screen = stage_clear
