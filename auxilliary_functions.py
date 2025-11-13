@@ -5,6 +5,7 @@ from assets.sound_paths import *
 from playsound3 import playsound
 import os
 import sys
+import time
 
 def play_sound(action_type):
     try:
@@ -15,6 +16,9 @@ def stop_sound(curr_playing):
     if curr_playing != None:
         curr_playing.stop()
     return None
+
+def save_leaderboard(self):
+    ...
 
 # Functions For User Choosing Maps
 def choose_map():
@@ -189,7 +193,7 @@ def show_entire_map(session):
     print("---------------------")
     return None
 
-def show_game_over(map, mushroom_count):
+def show_game_over(map, mushroom_count, mins_taken, seconds_taken):
     play_sound('game_over')
     clear_screen()
     column = get_terminal_col_size()
@@ -198,11 +202,12 @@ def show_game_over(map, mushroom_count):
     for line in display_game_over:
         print(line.center(column))
     print(f'However, you were able to collect {mushroom_count["collected"]} mushrooms!\n')
+    print(f'You played for {mins_taken} minutes and {seconds_taken} seconds.')
     for row in map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
 
-def show_stage_clear(map, mushroom_count):
+def show_stage_clear(map, mushroom_count, mins_taken, seconds_taken):
     play_sound('win')
     clear_screen()
     column = get_terminal_col_size()
@@ -210,7 +215,8 @@ def show_stage_clear(map, mushroom_count):
     display_stage_clear = stage_clear_screen.splitlines()
     for line in display_stage_clear:
         print(line.center(column))
-    print(f'You have collected all {mushroom_count['total']} mushrooms!\n')
+    print(f'You collected all {mushroom_count['total']} mushrooms!\n')
+    print(f'You played for {mins_taken} minutes and {seconds_taken} seconds.')
     for row in map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))

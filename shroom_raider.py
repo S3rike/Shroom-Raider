@@ -17,6 +17,9 @@ class Game:
         self.debug = None
         self.restart_game = True
         self.latest_action = None
+        self.start_time = None
+        self.end_time = None
+        self.completion_time = None
     # Basically int(main) 
     def run_game(self):
         self.initial_session()
@@ -44,6 +47,7 @@ class Game:
             self.fetch_map()
     # Loads Base Map File
     def fetch_map(self):
+        self.start_time = time.time()
         self.map = list()
         self.boulder_hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
@@ -139,6 +143,11 @@ class Game:
     def display(self):
         clear_screen()
         show_entire_map(self)
+        if self.start_time:
+            elapsed = time.time() - self.start_time
+            mins = int(elapsed // 60)
+            seconds = int(elapsed % 60)
+            print(f'Time Elapsed: {mins:02d}:{seconds:02d}\n')
         print(f'You have collected {self.mushroom_count['collected']} mushrooms!\n')
         if self.game_state['holding']:
             print(f'You currently have: {pickable_items[self.player_held_item]}')
@@ -192,16 +201,21 @@ class Game:
         return None
     # Shows Possible Ending Game States
     def show_result(self):
+        self.end_time = time.time()
+        self.completion_time = self.end_time - self.start_time
+        mins_taken = int(self.completion_time // 60)
+        seconds_taken = int(self.completion_time % 60)
+        # self.save_leaderboard() # to implement
         self.save_game()
         if self.mushroom_count['total'] == self.mushroom_count['collected']:
             clear_screen()
-            show_stage_clear(self.map, self.mushroom_count)
+            show_stage_clear(self.map, self.mushroom_count, mins_taken, seconds_taken)
         elif self.game_state['drowning']:
             clear_screen()
-            show_game_over(self.map, self.mushroom_count)
+            show_game_over(self.map, self.mushroom_count, mins_taken, seconds_taken)
         elif self.game_state['lost']:
             clear_screen()
-            show_game_over(self.map, self.mushroom_count)
+            show_game_over(self.map, self.mushroom_count, mins_taken, seconds_taken)
         else:
             pass # Invalid; Not possible to get
         return None
