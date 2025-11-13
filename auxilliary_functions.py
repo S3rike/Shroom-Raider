@@ -2,7 +2,12 @@
 from assets.final_state import *
 from assets.tile_tags import *
 from assets.sound_paths import *
+from assets.screen_display_text import *
 from playsound3 import playsound
+from rich.console import Console
+from rich.text import Text
+from rich.panel import Panel
+from wcwidth import wcswidth
 import os
 import sys
 import time
@@ -184,7 +189,7 @@ def new_pos(action, player_row, player_col):
         dest_col += 1
     return dest_row, dest_col
 
-# Showing Game Ending Displays
+# Showing Game State
 def show_entire_map(session):
     print("\n--- Current Map ---\n")
     for row in session.map:
@@ -249,10 +254,69 @@ def get_joint_path(*paths):
     return file
 def check_existing_file(file_name):
     return os.path.exists(file_name)
+def get_terminal_row_size():
+    return os.get_terminal_size().lines
 def get_terminal_col_size():
-    return os.get_terminal_size()[0]
+    return os.get_terminal_size().columns
 def os_command(command):
     return os.system(command)
+
+# Showing game intro and ending displays 
+TERMINAL_WIDTH = get_terminal_col_size()
+TERMINAL_LENGTH = get_terminal_row_size()
+
+console = Console(width=TERMINAL_WIDTH)
+
+# Stylize text depending on num parity
+def stylize_text(list_text, num):
+    text = Text(list_text[num])
+    text.stylize("bold red on white" if num % 2 == 0 else "italic")
+    return text
+
+# Clear screen to show only up to two phrases
+def clear_screen_if_needed(num):
+    if num % 2 == 0:
+        os_command('cls' if get_operating_system() == 'nt' else 'clear')
+
+# Check the display width
+def check_display_width(list_text, num):
+    display_width = wcswidth(list_text[num])
+    # For more information check out this link
+    # https://wcwidth.readthedocs.io/en/latest/intro.html#wcwidth-wcswidth
+    if display_width < 0:
+        return len(list_text[num])
+    else:
+        return display_width
+    
+# Print horizontal padding
+def print_horizontal_padding(num, padding_h):
+    if num % 2 == 0:
+        print('\n' * padding_h)
+
+# Add a typewriter effect
+def typewriter_effect(list_text):
+    padding_h = (TERMINAL_LENGTH - 2) // 2
+
+    for num in range(len(list_text)):
+        clear_screen_if_needed(num)
+        print_horizontal_padding(num, padding_h)
+
+        padding_v = (TERMINAL_WIDTH - check_display_width(list_text, num)) // 2
+
+        text_in_list = stylize_text(list_text, num)
+        sys.stdout.write(" " * padding_v)
+        sys.stdout.flush()
+
+        for char in text_in_list:
+            console.print(char, end="")
+            sys.stdout.flush()
+            if num % 2 == 0:
+                time.sleep(0.15)
+            else:
+                time.sleep(0.1)
+        print()
+
+        time.sleep(2.5)
 
 # What Will Happen If User Runs This File
 def error():
