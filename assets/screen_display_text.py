@@ -1,6 +1,6 @@
 # This file contains all the necessary text for intro and end screen displays
 
-# The first 
+# The first lines to be displayed
 INTRO_QUOTES = ["この世にあって欲しい物があるよ", 
                 "There are things I want in this world", 
                 "大きくて勇ましくて動かない永遠",
@@ -10,7 +10,7 @@ INTRO_QUOTES = ["この世にあって欲しい物があるよ",
                 "この人生は夢だらけ",
                 "This life is full of dreams"]
 
-
+# The Shroom Raider sign
 SHROOM_RAIDER_SIGN = '''
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                            //
