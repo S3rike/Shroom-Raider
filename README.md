@@ -195,7 +195,7 @@ https://github.com/user-attachments/assets/0a18b67c-18d9-4884-a941-688cf96321e6
 
 
 ## 👾 Bonus Features
-For more information regarding the additional features, click here...
+For more information regarding the additional features, check the bonus features branch!
 
 
 ## 📁 Code Structure
@@ -213,7 +213,14 @@ Shown below is the code structure (subject to change)
 
 ## 🧪 Unit Testing
 Add a detailed description of unit tests, how they can run, and how to add new tests
-
+Current unit tests check for:
+- Actually winning!
+- Walking into walls
+- Walking into water
+- Pushing boulders into valid spaces
+- Pushing boulders into trees, or other boulders
+- Usage of axe and flamethrowers
+- Trying to pick up an item multiple times, or picking up an item while already holding one
 
 
 <!-- ## 👥 About Us
