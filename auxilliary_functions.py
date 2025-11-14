@@ -1,8 +1,9 @@
-# Imports From Standard Libraries And Assets Used
+# Imports From Assets Used
 from assets.final_state import *
 from assets.tile_tags import *
 from assets.sound_paths import *
 from assets.screen_display_text import *
+# Imports From Libraries
 from playsound3 import playsound
 from rich.console import Console
 from rich.text import Text
@@ -13,6 +14,7 @@ import os
 import sys
 import time
 
+# Sound Functions
 def play_sound(action_type):
     try:
         return playsound(f"assets/audio/{sound_files[action_type]}", block=False)
@@ -22,22 +24,6 @@ def stop_sound(curr_playing):
     if curr_playing != None:
         curr_playing.stop()
     return None
-
-def save_to_leaderboard(self, name_input, completion_time):
-    map_leaderboard_file = f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}_leaderboard.txt"
-    time_of_save = time.strftime("%d - %b - %Y %H:%M")
-    with open(map_leaderboard_file, 'a') as f:
-        f.write(f'{name_input} | {completion_time} | {format_completion_time(completion_time)} | {time_of_save}\n')
-        
-
-def format_completion_time(completion_time):
-    completion_hours = int(completion_time // 3600)
-    completion_mins = int(completion_time % 3600)
-    completion_seconds = completion_time % 60
-    if completion_hours > 0:
-        return f"{completion_hours}:{completion_mins:02d}:{completion_seconds:05.2f}"
-    else:
-        return f"{completion_mins}:{completion_seconds:05.2f}"
 
 # Functions For User Choosing Maps
 def choose_map():
@@ -74,6 +60,7 @@ def choose_map():
         except:
             pass
 
+# Leaderboard and Time Functions
 def fetch_leaderboard(map_name):
     clear_screen()
     leaderboard_file = f"saved_states/{map_name[0::2]}{map_name[1::2]}_leaderboard.txt"
@@ -94,18 +81,16 @@ def fetch_leaderboard(map_name):
                         'date': submission_date
                     })
                 except (ValueError, IndexError):
-                    continue
-        
+                    continue 
     except FileNotFoundError:
         print("\n No leaderboard data yet exists for this map!")
         instruct_input("\nPress enter to return to menu...")
-        return
+        return None
     
     if not leaderboard:
         print("\n No valid leaderboard entries found!")
         instruct_input("\nPress enter to return to menu...")
-        return
-
+        return None
     leaderboard.sort(key=lambda entry: entry['time'])
 
     print(f"\n{'='*60}")
@@ -113,28 +98,37 @@ def fetch_leaderboard(map_name):
     print(f"\n{'='*60}")
     print(f"\n{'Rank':<6} {'Name':<20} {'Time':<15} {'Date':<20}")
     print(f"\n{'-'*60}")
-
     for i, entry in enumerate(leaderboard, 1):
         print(f"{i:<6} {entry['name']:<20} {entry['formatted_time']:<15} {entry['date']:<20}")
         # data - left_aligned - chars
 
     print(f"\n{'-'*60}")
-
     instruct_input("\nPress enter to return to menu...")
-    ...
-
+    return None
+def save_to_leaderboard(self, name_input, completion_time):
+    map_leaderboard_file = f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}_leaderboard.txt"
+    time_of_save = time.strftime("%d - %b - %Y %H:%M")
+    with open(map_leaderboard_file, 'a') as f:
+        f.write(f'{name_input} | {completion_time} | {format_completion_time(completion_time)} | {time_of_save}\n')   
+def format_completion_time(completion_time):
+    completion_hours = int(completion_time // 3600)
+    completion_mins = int(completion_time % 3600)
+    completion_seconds = completion_time % 60
+    if completion_hours > 0:
+        return f"{completion_hours}:{completion_mins:02d}:{completion_seconds:05.2f}"
+    else:
+        return f"{completion_mins}:{completion_seconds:05.2f}"
+# Map Modifications
 def return_map_list():
     curr_directory = get_current_directory()
     peek_folder = get_joint_path(curr_directory, 'maps')
     map_list = [file.strip('.txt') for file in os.listdir(peek_folder) if os.path.isfile(os.path.join(peek_folder, file))]
     return map_list
-
 def show_list_maps():
     curr_directory = get_current_directory()
     peek_folder = get_joint_path(curr_directory, 'maps')
     map_list = [file.strip('.txt') for file in os.listdir(peek_folder) if os.path.isfile(os.path.join(peek_folder, file))]
     available_maps = '\n'.join(map_list)
-    map_count = len(map_list)
     console.print(Panel.fit(
         available_maps,
         border_style="grey42",
@@ -147,17 +141,14 @@ def show_list_maps():
     #     print(f"{map_list[index]}   {map_list[index + 1]}   {map_list[index + 2]}")
     # print(f"--------------------------------\n")
     return None
-
 # Checks For Valid Inputs
 def check_pickable_object(action, holding_item, hidden_object):
     return action == 'P' and holding_item == False and hidden_object in pickable_items
-
 def check_game_over(session):
     bool_check1 = session.mushroom_count['total'] == session.mushroom_count['collected']
     bool_check2 = session.game_state['drowning']
     bool_check3 = session.game_state['lost']
     return bool_check1 or bool_check2 or bool_check3
-
 def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest means destination
     if pos_in_bounds(session.map_rows, session.map_cols, dest_row, dest_col):
         dest_tile = session.map[dest_row][dest_col]
@@ -234,7 +225,6 @@ def use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.player_held_item = None
     session.game_state['holding'] = False
     return None
-
 # Flamethrower Functions
 def burn_adj_trees(session, row, col):
     burn_stack = [(row, col)]
@@ -244,7 +234,6 @@ def burn_adj_trees(session, row, col):
         session.map[tree_row][tree_col] = '.'
         checked_tiles.add((tree_row, tree_col))
         burn_stack.extend(tuple(check_adj_trees(session, tree_row, tree_col)))
-
 def check_adj_trees(session, row, col):
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
     for shift_row, shift_col in directions:
@@ -261,10 +250,8 @@ def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[dest_row][dest_col] = 'L'
     session.player_coords['row'] = dest_row
     session.player_coords['col'] = dest_col
-
 def pos_in_bounds(total_row, total_col, row, col):
     return (0 <= row < total_row) and (0 <= col < total_col)
-
 def new_pos(action, player_row, player_col):
     dest_row, dest_col = player_row, player_col
     if action == 'W':
@@ -287,7 +274,6 @@ def show_entire_map(session):
     panel = Panel(final_ui, title="Current Map")
     console.print(panel, justify="center")
     return None
-
 def show_game_over(map, mushroom_count, mins_taken, seconds_taken, completion_time):
     play_sound('game_over')
     clear_screen()
@@ -302,7 +288,6 @@ def show_game_over(map, mushroom_count, mins_taken, seconds_taken, completion_ti
     for row in map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
-
 def show_stage_clear(self, mins_taken, seconds_taken, completion_time):
     play_sound('win')
     clear_screen()
@@ -324,36 +309,29 @@ def show_stage_clear(self, mins_taken, seconds_taken, completion_time):
 def exit_terminal():
     clear_screen()
     return sys.exit()
-
 def clear_screen():
     if get_operating_system() == "nt":
         os_command("cls")
     else:
         os_command("clear")
-
 def instruct_input(input_text):
     while True:
         try:
             return input(input_text)
         except:
             pass
-
 def get_operating_system():
     return os.name
-
 def get_current_directory():
     return os.getcwd()
-
 def create_directory(name):
     os.mkdir(name)
     return None
-
 def get_joint_path(*paths):
     file = ""
     for line in paths:
         file = os.path.join(file, line)
     return file
-
 def check_existing_file(file_name):
     return os.path.exists(file_name)
 def get_terminal_row_size():
@@ -374,7 +352,6 @@ def stylize_text(list_text, num):
     text = Text(list_text[num])
     text.stylize("bold red on white" if num % 2 == 0 else "italic")
     return text
-
 # Clear screen to show only up to two phrases
 def clear_screen_if_needed(num):
     if num % 2 == 0:
@@ -418,7 +395,6 @@ def typewriter_effect(list_text):
                 time.sleep(0.15)
         print()
         time.sleep(3)
-
 def display_intro():
     typewriter_effect(INTRO_QUOTES)
     os_command('cls' if get_operating_system() == 'nt' else 'clear')
@@ -427,10 +403,6 @@ def display_intro():
 
 # What Will Happen If User Runs This File
 def error():
-    '''
-    If incorrectly running this file
-    will add later
-    '''
-    ...
+    exit_terminal()
 if __name__ == "__main__":
     error()
