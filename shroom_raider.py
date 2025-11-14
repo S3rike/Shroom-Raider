@@ -230,10 +230,10 @@ class Game:
             show_stage_clear(self, mins_taken, seconds_taken, completion_time)
         elif self.game_state['drowning']:
             clear_screen()
-            show_game_over(self.map, self.mushroom_count, mins_taken, seconds_taken)
+            show_game_over(self.map, self.mushroom_count, mins_taken, seconds_taken, completion_time)
         elif self.game_state['lost']:
             clear_screen()
-            show_game_over(self.map, self.mushroom_count, mins_taken, seconds_taken)
+            show_game_over(self.map, self.mushroom_count, mins_taken, seconds_taken, completion_time)
         else:
             pass # Invalid; Not possible to get
         return None

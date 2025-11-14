@@ -23,18 +23,20 @@ def stop_sound(curr_playing):
     return None
 
 def save_to_leaderboard(self, name_input, completion_time):
-    leaderboard_file = f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}_leaderboard.txt"
+    map_leaderboard_file = f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}_leaderboard.txt"
     time_of_save = time.strftime("%d - %b - %Y %H:%M")
-    converted_hours = int(completion_time // 3600)
-    converted_mins = int(completion_time % 3600)
-    convered_seconds = completion_time % 60
-    if converted_hours > 0:
-        converted_completion_time = f"{converted_hours}:{converted_mins:02d}:{convered_seconds:05.2f}"
-    else:
-        converted_completion_time = f"{converted_mins}:{convered_seconds:05.2f}"
-    with open(leaderboard_file, 'a') as f:
-        f.write(f'{name_input} | {converted_completion_time} | {time_of_save}\n')
+    with open(map_leaderboard_file, 'a') as f:
+        f.write(f'{name_input} | {format_completion_time(completion_time)} | {time_of_save}\n')
     ...
+
+def format_completion_time(completion_time):
+    completion_hours = int(completion_time // 3600)
+    completion_mins = int(completion_time % 3600)
+    completion_seconds = completion_time % 60
+    if completion_hours > 0:
+        return f"{completion_hours}:{completion_mins:02d}:{completion_seconds:05.2f}"
+    else:
+        return f"{completion_mins}:{completion_seconds:05.2f}"
 
 # Functions For User Choosing Maps
 def choose_map():
@@ -217,7 +219,7 @@ def show_entire_map(session):
     print("---------------------")
     return None
 
-def show_game_over(map, mushroom_count, mins_taken, seconds_taken):
+def show_game_over(map, mushroom_count, mins_taken, seconds_taken, completion_time):
     play_sound('game_over')
     clear_screen()
     column = get_terminal_col_size()
@@ -227,6 +229,7 @@ def show_game_over(map, mushroom_count, mins_taken, seconds_taken):
         print(line.center(column))
     print(f'However, you were able to collect {mushroom_count["collected"]} mushrooms!\n')
     print(f'You played for {mins_taken} minutes and {seconds_taken} seconds.')
+    print(f'Full time: {format_completion_time(completion_time)}\n')
     for row in map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
@@ -241,10 +244,11 @@ def show_stage_clear(self, mins_taken, seconds_taken, completion_time):
         print(line.center(column))
     print(f'You collected all {self.mushroom_count['total']} mushrooms!\n')
     print(f'You played for {mins_taken} minutes and {seconds_taken} seconds.')
+    print(f'Full time: {format_completion_time(completion_time)}\n')
     for row in self.map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
-    name_input = instruct_input("Enter name for leaderboard: ")
+    name_input = instruct_input("\nEnter name for leaderboard: ")
     save_to_leaderboard(self, name_input, completion_time)
 
 # System Commands
