@@ -146,7 +146,7 @@ class Game:
             if self.game_state['holding']:
                 self.use_held_item(dest_tile, dest_row, dest_col, curr_row, curr_col)
             else:
-                self.game_state['error'] = True
+                pass
         else:
             pass #invalid but definitely will not be used
         return None
