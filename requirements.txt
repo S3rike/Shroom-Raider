@@ -1,3 +1,4 @@
 playsound3
 rich==14.2.0
 wcwidth==0.2.14
+textual==6.6.0

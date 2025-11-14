@@ -169,16 +169,25 @@ class Game:
             elapsed = time.time() - self.start_time - self.pause_time
             mins = int(elapsed // 60)
             seconds = int(elapsed % 60)
-            print(f'Time Elapsed: {mins:02d}:{seconds:02d}\n')
-        print(f'You have collected {self.mushroom_count['collected']} mushrooms!\n')
+            console.print(f'Time Elapsed: [blink red]{mins:02d}:{seconds:02d}\n[blink red]')
+        console.print(f'You have collected [red]{self.mushroom_count['collected']}[/red] mushrooms!\n')
         if self.game_state['holding']:
-            print(f'You currently have: {pickable_items[self.player_held_item]}')
+            console.print(f'You currently have: [dim]{pickable_items[self.player_held_item]}[not dim]\n')
         elif self.player_hidden_object in pickable_items.keys():
-            print(f'There is a {pickable_items[self.player_hidden_object]} below you! Input [P] to pick it up!')
+            console.print(f'There is a [bold magenta]{pickable_items[self.player_hidden_object]}[/bold magenta] below you! Input [red]P[/red] to pick it up!\n')
         else:
-            print(f'You currently do not have an item!')
-        print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
-        print(f"\nTo Reset: [!]  To Quit: [Q]  To Save: [F]")
+            console.print(f'You currently [dim]do not[not dim] have an item!\n')
+        console.print(Panel.fit(
+                "Move Up:    [red3]W[/red3]\n"
+                "Move Left:  [yellow1]A[/yellow1]\n"
+                "Move Down:  [green1]S[/green1]\n"
+                "Move Right: [dodger_blue3]D[/dodger_blue3]",
+                title="Controls"
+            )
+        )
+        console.print(Panel.fit("\nTo Reset: [!]  To Quit: [Q]  To Save: [F]", 
+                                title="Commands", 
+                                title_align="left"))
         return None
     
     # Validates and Runs User Inputs
@@ -191,7 +200,7 @@ class Game:
         if self.game_state['error']:
             print(f"Invalid Action")
             self.game_state['error'] = False
-        actions = instruct_input("Enter your next action: ").upper()
+        actions = Prompt.ask("\n[blink chartreuse1]Enter your next action[blink chartreuse1]").upper()
         self.latest_action = None
         for action in actions:
             # Found in auxilliary_functions
