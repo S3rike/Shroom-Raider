@@ -7,7 +7,7 @@ immovable_tiles = {'T', '~'} # Set of tiles that cannot be moved into
 adjustable_tiles = {'R'}
 tile_ui = {'L':'🧑', '.':'　', 'T':'🌲', '+':'🍄', 'R':'🪨', '~':'🟦', '-':'⬜', 'x':'🪓', '*':'🔥'}
 
-class Game:
+class Base_Game:
     def __init__(self, file_name, input_move, output_file):
         self.file_name = file_name
         self.actions = input_move
@@ -33,22 +33,22 @@ class Game:
         self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
         file = open(self.get_joint_path('maps', self.file_name), 'rt')
         for y_coord, tile_row in enumerate(file):
-            self.map.append(list(tile_row))
-            for x_coord, tile_char in enumerate(tile_row):
-                if tile_char == 'L':
-                    self.player_coords['row'] = y_coord
-                    self.player_coords['col'] = x_coord
-                    self.player_hidden_object = '.'
-                    self.player_held_item = None
-                elif tile_char == 'R':
-                    self.boulder_hidden_objects[(y_coord, x_coord)] = '.'
-                elif tile_char == '+':
-                    self.mushroom_count['total'] += 1
-                else:
-                    pass
+            if y_coord == 0: self.map_rows, self.map_cols = map(int, tile_row.strip().split(" "))
+            else:
+                self.map.append(list(tile_row))
+                for x_coord, tile_char in enumerate(tile_row):
+                    if tile_char == 'L':
+                        self.player_coords['row'] = y_coord - 1
+                        self.player_coords['col'] = x_coord
+                        self.player_hidden_object = '.'
+                        self.player_held_item = None
+                    elif tile_char == 'R':
+                        self.boulder_hidden_objects[(y_coord - 1, x_coord)] = '.'
+                    elif tile_char == '+':
+                        self.mushroom_count['total'] += 1
+                    else:
+                        pass
         file.close()
-        self.map_rows = len(self.map)
-        self.map_cols = len(self.map[0]) - 1
         return None
     def player_input(self):
         if self.check_game_over(): # Only occurs during backup of a finished self
@@ -132,9 +132,9 @@ class Game:
                     self.boulder_hidden_objects.pop((dest_row, dest_col))
                     self.modify_movement(dest_tile, dest_row, dest_col, curr_row, curr_col)
                 else:
-                    self.game_state['error'] = True
+                    pass
             else:
-                self.game_state['error'] = True
+                pass
         elif dest_tile == '~':
             self.latest_action = 'water'
             self.game_state['drowning'] = True
@@ -144,7 +144,7 @@ class Game:
             if self.game_state['holding']:
                 self.use_held_item(dest_tile, dest_row, dest_col, curr_row, curr_col)
             else:
-                self.game_state['error'] = True
+                pass
         else:
             pass #invalid but definitely will not be used
         return None
@@ -236,5 +236,5 @@ if __name__ == "__main__":
     get_arguments.add_argument('-o', '--output_file', type = str, default=None)
     inputs = get_arguments.parse_args()
 
-    session = Game(inputs.stage_name, inputs.move_actions, inputs.output_file)
+    session = Base_Game(inputs.stage_name, inputs.move_actions, inputs.output_file)
     session.run_game()

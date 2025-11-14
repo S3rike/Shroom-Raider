@@ -85,9 +85,9 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
                 session.boulder_hidden_objects.pop((dest_row, dest_col))
                 modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
             else:
-                session.game_state['error'] = True
+                pass
         else:
-            session.game_state['error'] = True
+            pass
     elif dest_tile == '~':
         session.game_state['drowning'] = True
         session.map[curr_row][curr_col] = session.player_hidden_object
@@ -96,8 +96,7 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
         if session.game_state['holding']:
             use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
         else:
-            session.game_state['error'] = True
-        ...
+            pass
     else:
         pass #invalid but definitely will not be used
     return None

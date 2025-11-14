@@ -1,5 +1,5 @@
 import pytest
-from shroom_raider import *
+from pytest_stuff.shroom_raider import Base_Game
 
 @pytest.mark.parametrize("file, actions, verdict",[
     ('map3.txt', 's', 'NO CLEAR'),
@@ -11,7 +11,7 @@ from shroom_raider import *
     ('map3.txt', 'ddddssdddssddddd', 'NO CLEAR'),
 ])
 def test_wall(file, actions, verdict):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
     
 @pytest.mark.parametrize("file, actions, verdict",[
@@ -20,7 +20,7 @@ def test_wall(file, actions, verdict):
     ('map2.txt', 'aawwadssdddwddaawwdd', 'CLEAR'),
 ])
 def test_boulder(file, actions, verdict):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
 
 @pytest.mark.parametrize("file, actions, verdict",[
@@ -29,7 +29,7 @@ def test_boulder(file, actions, verdict):
     ('map3.txt', 'ddddssdddsddww', 'NO CLEAR'),
 ])
 def test_drown(file, actions, verdict):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
 
 @pytest.mark.parametrize("file, actions, verdict",[
@@ -37,7 +37,7 @@ def test_drown(file, actions, verdict):
     ('map3.txt', 'ddddssdddwsaawddsssddwwwwdpasssaawaasaaaasappppppdwwaa', 'CLEAR'),
 ])
 def test_axe(file, actions, verdict):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
 
 @pytest.mark.parametrize("file, actions, verdict",[
@@ -46,7 +46,7 @@ def test_axe(file, actions, verdict):
     ('map_debug.txt', 'spdwpppppssdddwwww', 'CLEAR'),
 ])
 def test_flamethrower(file, actions, verdict):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
 
 @pytest.mark.parametrize("file, actions, verdict",[
@@ -54,7 +54,7 @@ def test_flamethrower(file, actions, verdict):
     ('map_debug.txt', 'wddspddwss', 'CLEAR'),
 ])
 def test_boulder_to_boulder(file, actions, verdict):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
 
 @pytest.mark.parametrize("file, actions, verdict",[
@@ -62,7 +62,7 @@ def test_boulder_to_boulder(file, actions, verdict):
     ('map_debug.txt', 'wwddsdpdddwss', 'CLEAR'),
 ])
 def test_boulder_to_boulder(file, actions, verdict):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
 
 # test item usage
@@ -71,7 +71,7 @@ def test_boulder_to_boulder(file, actions, verdict):
     ('map_debug.txt', 'spdddd', False, None),  # used flamethrower
 ])
 def test_item_consumption(file, actions, expected_holding, expected_item):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     assert session.game_state['holding'] == expected_holding
     assert session.player_held_item == expected_item
 
@@ -80,6 +80,6 @@ def test_item_consumption(file, actions, expected_holding, expected_item):
     ('map_debug.txt', 'dpasp'),  # multiple pickups after getting item
 ])
 def test_multiple_pickup_attempts(file, actions):
-    session = Game(file, actions, None)
+    session = Base_Game(file, actions, None)
     # should not crash, holding state should be consistent
     assert isinstance(session.game_state['holding'], bool)
