@@ -204,19 +204,41 @@ https://github.com/user-attachments/assets/0a18b67c-18d9-4884-a941-688cf96321e6
 
 
 ## 📁 Code Structure
-Shown below is the code structure (subject to change)
+
+The project is organised into three main files:
+- shroom_raider.py - Contains the Game class and the main game logic
+- auxilliary_functions.py - Contains helper functions for gameplay mechanics, display, and other system operations
+- assets folder - Contains game assets such as tile definitions
+
+
+
+Here is a **visual rendition** of the file structure!
 ```bash
 ├───assets
 │   └───__pycache__
-├───icon
+│   └───icons
+│   └───images
+│   └───final_state.py
+│   └───tile_tags.py
 ├───maps
 │   └───tutorial
 │       ├───items
 │       └───tiles
-└───__pycache__
+│   └───various maps here
+└───pytest_stuff
+│   └───__pycache__
+│   └───icons
+│   └───images
+│   └───final_state.py
+│   └───tile_tags.py
+└───auxilliary_functions.py
+└───README.md
+└───requirements.txt
+└───shroom_raider.py
 ```
 
 ## 🧪 Unit Testing
+
 Current unit tests check for:
 - Actually winning!
 - Walking into walls
@@ -225,6 +247,8 @@ Current unit tests check for:
 - Pushing boulders into trees, or other boulders
 - Usage of axe and flamethrowers
 - Trying to pick up an item multiple times, or picking up an item while already holding one
+
+This accounts for all possible game_states that a player is likely to encounter (all movement types, winning/losing states, trying to walk or move objects that cannot be moved, and properly accounting for item usage and tracking)
 
 
 
