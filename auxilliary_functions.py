@@ -26,8 +26,8 @@ def save_to_leaderboard(self, name_input, completion_time):
     map_leaderboard_file = f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}_leaderboard.txt"
     time_of_save = time.strftime("%d - %b - %Y %H:%M")
     with open(map_leaderboard_file, 'a') as f:
-        f.write(f'{name_input} | {format_completion_time(completion_time)} | {time_of_save}\n')
-    ...
+        f.write(f'{name_input} | {completion_time} | {format_completion_time(completion_time)} | {time_of_save}\n')
+        
 
 def format_completion_time(completion_time):
     completion_hours = int(completion_time // 3600)
@@ -45,15 +45,19 @@ def choose_map():
     while True:
         clear_screen()
         show_list_maps()
-        print(f'[R] To Refresh List       [Q] To Quit Game')
+        print(f'[R] To Refresh List       [Q] To Quit Game       [L] To Display Leaderboard')
         if curr_playing == None: print(f"Audio Backend Not Available")
         if bool_invalid_input: print(f"File Not found, Try Again")
-        map_name = instruct_input("Enter Name Of Map: ")
+        map_name = instruct_input("Enter name of map or action: ")
         if map_name.upper() == 'R':
             bool_invalid_input = False
             continue
         elif map_name.upper() == 'Q':
             exit_terminal()
+        elif map_name.upper() == 'L':
+            map_leaderboard_check = instruct_input("Which map would you like to view? ")
+            fetch_leaderboard(map_leaderboard_check)
+            continue
         else:
             file_name = f"maps/{map_name}.txt"
             if check_existing_file(file_name):
@@ -62,6 +66,55 @@ def choose_map():
                 return map_name        
             else:
                 bool_invalid_input = True
+
+def fetch_leaderboard(map_name):
+    clear_screen()
+    leaderboard_file = f"saved_states/{map_name[0::2]}{map_name[1::2]}_leaderboard.txt"
+    try:
+        with open(leaderboard_file, 'r') as f:
+            leaderboard = []
+            for line in f:
+                parts = line.strip().split('|')
+                try:
+                    player_name = parts[0].strip()
+                    completion_time = float(parts[1].strip())
+                    formatted_time = parts[2].strip()
+                    submission_date = parts[3].strip()
+                    leaderboard.append({
+                        'name': player_name, 
+                        'time': completion_time,
+                        'formatted_time': formatted_time,
+                        'date': submission_date
+                    })
+                except (ValueError, IndexError):
+                    continue
+        
+    except FileNotFoundError:
+        print("\n No leaderboard data yet exists for this map!")
+        instruct_input("\nPress enter to return to menu...")
+        return
+    
+    if not leaderboard:
+        print("\n No valid leaderboard entries found!")
+        instruct_input("\nPress enter to return to menu...")
+        return
+
+    leaderboard.sort(key=lambda entry: entry['time'])
+
+    print(f"\n{'='*60}")
+    print(f'\nLEADERBOARD - {map_name}')
+    print(f"\n{'='*60}")
+    print(f"\n{'Rank':<6} {'Name':<20} {'Time':<15} {'Date':<20}")
+    print(f"\n{'-'*60}")
+
+    for i, entry in enumerate(leaderboard, 1):
+        print(f"{i:<6} {entry['name']:<20} {entry['formatted_time']:<15} {entry['date']:<20}")
+        # data - left_aligned - chars
+
+    print(f"\n{'-'*60}")
+
+    instruct_input("\nPress enter to return to menu...")
+    ...
 
 def return_map_list():
     curr_directory = get_current_directory()

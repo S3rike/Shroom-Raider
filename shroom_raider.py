@@ -83,7 +83,7 @@ class Game:
             file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}.txt", 'w')
         elapsed_time = 0
         if self.start_time:
-            elasped_time = time.time() - self.start_time - self.pause_time
+            elapsed_time = time.time() - self.start_time - self.pause_time
         file.write(f"{self.map_rows} {self.map_cols}\n")
         file.write(f"{self.player_coords['row']} {self.player_coords['col']}\n")
         file.write(f"{self.player_held_item} {self.player_hidden_object}\n")
@@ -134,10 +134,10 @@ class Game:
                 self.restart_game = bool(line.strip())
             elif row == 7:
                 try:
-                    saved_elapsed_time = float(line.strio())
+                    saved_elapsed_time = float(line.strip())
                 except ValueError:
                     saved_elapsed_time = 0
-            elif 7 <= row <= self.map_rows + 7:
+            elif 7 < row <= self.map_rows + 7:
                 self.map.append(list(line.split(" ")))
             else:
                 x, y, char = line.strip().split(' ')
@@ -273,7 +273,7 @@ def menu():
     ...
     
 if __name__ == "__main__":
-    display_intro()
+    # display_intro()
     while True:
         menu()
         session = Game(choose_map())
