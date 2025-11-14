@@ -68,6 +68,8 @@ def choose_map():
                     return map_name        
                 else:
                     bool_invalid_input = True
+        except SystemExit:
+            raise
         except:
             pass
 # Display Leaderboard
