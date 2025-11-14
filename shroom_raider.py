@@ -195,11 +195,14 @@ class Game:
                 break
             elif self.game_state['error']:
                 break
-            elif check_pickable_object(action, self.game_state['holding'], self.player_hidden_object):
-                self.game_state['holding'] = True
-                self.player_held_item = self.player_hidden_object
-                self.player_hidden_object = '.'
-                self.latest_action = 'pick'
+            elif action == "P":
+                if check_pickable_object(action, self.game_state['holding'], self.player_hidden_object):
+                    self.game_state['holding'] = True
+                    self.player_held_item = self.player_hidden_object
+                    self.player_hidden_object = '.'
+                    self.latest_action = 'pick'
+                else:
+                    pass
             elif action in ("W", "A", "S", "D"):
                 # Found in auxilliary_functions
                 dest_row, dest_col = new_pos(action, self.player_coords['row'], self.player_coords['col'])
