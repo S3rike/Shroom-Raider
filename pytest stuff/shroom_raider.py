@@ -1,5 +1,5 @@
-import pytest
 from argparse import ArgumentParser
+import os
 
 movable_tiles = {'.', '-', '+'} # Set of tiles that can be moved immediately
 pickable_items = {'x': "Axe", '*': "Flamethrower"} # Set of tiles that can be picked up
@@ -31,7 +31,7 @@ class Game:
         self.boulder_hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
         self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
-        file = open(self.file_name, 'rt')
+        file = open(self.get_joint_path('maps', self.file_name), 'rt')
         for y_coord, tile_row in enumerate(file):
             self.map.append(list(tile_row))
             for x_coord, tile_char in enumerate(tile_row):
@@ -64,12 +64,12 @@ class Game:
             elif self.game_state['error']:
                 break
             elif action == "P":
-                if self.check_pickable_object(action):
+                if self.check_pickable_object():
                     self.game_state['holding'] = True
                     self.player_held_item = self.player_hidden_object
                     self.player_hidden_object = '.'
                 else:
-                    pass
+                    continue
             elif action in ("W", "A", "S", "D"):
                 # Found in auxilliary_functions
                 dest_row, dest_col = self.new_pos(action)
@@ -80,13 +80,12 @@ class Game:
                 self.fetch_map()
                 self.latest_action = None
             elif action == 'F':
-                self.save_game()
                 self.latest_action = None
             else:
                 break
         return None
-    def check_pickable_object(self, action):
-        return action == 'P' and self.player_held_item == False and self.player_hidden_object in pickable_items
+    def check_pickable_object(self):
+        return self.player_held_item == None and self.player_hidden_object in pickable_items.keys()
     def check_game_over(self):
         bool_check1 = self.mushroom_count['total'] == self.mushroom_count['collected']
         bool_check2 = self.game_state['drowning']
@@ -152,11 +151,9 @@ class Game:
     def use_held_item(self, dest_tile, dest_row, dest_col, curr_row, curr_col):
         if self.player_held_item == 'x':
             dest_tile = '.'
-            self.latest_action = 'cut'
             self.modify_movement(dest_tile, dest_row, dest_col, curr_row, curr_col)
         elif self.player_held_item == '*':
             self.burn_adj_trees(dest_row, dest_col)
-            self.latest_action = 'burn'
             self.map[curr_row][curr_col] = self.player_hidden_object
             self.map[dest_row][dest_col] = 'L'
             self.player_coords['row'] = dest_row
@@ -201,7 +198,11 @@ class Game:
         elif action == 'D':
             dest_col += 1
         return dest_row, dest_col
-    
+    def get_joint_path(self, *paths):
+        file = ""
+        for line in paths:
+            file = os.path.join(file, line)
+        return file
     def output(self):
         if self.output_file != None:
             file = open(f"{self.output_file}", 'w')

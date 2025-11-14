@@ -144,7 +144,6 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
             use_held_item(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
         else:
             session.game_state['error'] = True
-        ...
     else:
         pass #invalid but definitely will not be used
     return None

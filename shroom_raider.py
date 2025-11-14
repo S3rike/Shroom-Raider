@@ -216,7 +216,7 @@ class Game:
                 self.save_game()
                 self.latest_action = None
             else:
-                print(f"Invalid Action Found: {action}")
+                self.debug = f"Invalid Action Found: {action}"
                 break
         if self.latest_action and not check_game_over(self):
             play_sound(self.latest_action)

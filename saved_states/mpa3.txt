@@ -5,6 +5,7 @@ None .
 0 0
 0 0
 1
+0
 T T T T T T T T T T T T T T T 
 T . L . R . . . R T T . x . T 
 T R T T T T . . R + ~ ~ T T T 
