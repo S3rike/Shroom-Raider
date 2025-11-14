@@ -273,9 +273,6 @@ class Game:
         else:
             return False      
            
-def menu():
-    ...
-    
 if __name__ == "__main__":
     get_arguments = ArgumentParser()
     get_arguments.add_argument('-f', '--stage_name', type = str, default = None)
@@ -284,10 +281,9 @@ if __name__ == "__main__":
     inputs = get_arguments.parse_args()
 
     if inputs.move_actions == None or inputs.output_file == None:
-        if inputs.output_file == None:
+        if inputs.stage_name == None:
             initial_file = choose_map()
         while True:
-            menu()
             session = Game(initial_file)
             session.run_game()
             initial_file = choose_map()
