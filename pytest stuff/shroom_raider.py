@@ -33,19 +33,21 @@ class Game:
         self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
         file = open(self.get_joint_path('maps', self.file_name), 'rt')
         for y_coord, tile_row in enumerate(file):
-            self.map.append(list(tile_row))
-            for x_coord, tile_char in enumerate(tile_row):
-                if tile_char == 'L':
-                    self.player_coords['row'] = y_coord
-                    self.player_coords['col'] = x_coord
-                    self.player_hidden_object = '.'
-                    self.player_held_item = None
-                elif tile_char == 'R':
-                    self.boulder_hidden_objects[(y_coord, x_coord)] = '.'
-                elif tile_char == '+':
-                    self.mushroom_count['total'] += 1
-                else:
-                    pass
+            if y_coord == 0: self.map_rows, self.map_cols = map(int, tile_row.strip().split(" "))
+            else:
+                self.map.append(list(tile_row))
+                for x_coord, tile_char in enumerate(tile_row):
+                    if tile_char == 'L':
+                        self.player_coords['row'] = y_coord - 1
+                        self.player_coords['col'] = x_coord
+                        self.player_hidden_object = '.'
+                        self.player_held_item = None
+                    elif tile_char == 'R':
+                        self.boulder_hidden_objects[(y_coord - 1, x_coord)] = '.'
+                    elif tile_char == '+':
+                        self.mushroom_count['total'] += 1
+                    else:
+                        pass
         file.close()
         self.map_rows = len(self.map)
         self.map_cols = len(self.map[0]) - 1
