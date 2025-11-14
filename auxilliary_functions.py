@@ -76,15 +76,15 @@ def fetch_leaderboard(map_name):
             for line in f:
                 parts = line.strip().split('|')
                 try:
-                    name = parts[0].strip()
-                    time_val = float(parts[1].strip())
+                    player_name = parts[0].strip()
+                    completion_time = float(parts[1].strip())
                     formatted_time = parts[2].strip()
-                    date = parts[3].strip()
+                    submission_date = parts[3].strip()
                     leaderboard.append({
-                        'name': name, 
-                        'time': time_val,
+                        'name': player_name, 
+                        'time': completion_time,
                         'formatted_time': formatted_time,
-                        'date': date
+                        'date': submission_date
                     })
                 except (ValueError, IndexError):
                     continue
