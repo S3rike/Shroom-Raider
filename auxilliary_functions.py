@@ -50,6 +50,12 @@ def choose_map():
             else:
                 bool_invalid_input = True
 
+def return_map_list():
+    curr_directory = get_current_directory()
+    peek_folder = get_joint_path(curr_directory, 'maps')
+    map_list = [file.strip('.txt') for file in os.listdir(peek_folder) if os.path.isfile(os.path.join(peek_folder, file))]
+    return map_list
+
 def show_list_maps():
     curr_directory = get_current_directory()
     peek_folder = get_joint_path(curr_directory, 'maps')
@@ -315,8 +321,13 @@ def typewriter_effect(list_text):
             else:
                 time.sleep(0.1)
         print()
-
         time.sleep(2.5)
+
+def display_intro():
+    typewriter_effect(INTRO_QUOTES)
+    os_command('cls' if get_operating_system() == 'nt' else 'clear')
+    console.print(SHROOM_RAIDER_SIGN, style="red", justify="center")
+    time.sleep(2)
 
 # What Will Happen If User Runs This File
 def error():
