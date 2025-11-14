@@ -48,3 +48,30 @@ def test_axe(file, actions, verdict):
 def test_flamethrower(file, actions, verdict):
     session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
+
+@pytest.mark.parametrize("file, actions, verdict",[
+    ('map_debug.txt', 'wdddd', 'NO CLEAR'),
+    ('map_debug.txt', 'wddspddwss', 'CLEAR'),
+])
+def test_boulder_to_boulder(file, actions, verdict):
+    session = Base_Game(file, actions, None)
+    assert session.run_game() == verdict
+
+# test item usage
+@pytest.mark.parametrize("file, actions, expected_holding, expected_item",[
+    ('map_debug.txt', 'dpd', False, None),  # used axe
+    ('map_debug.txt', 'spdddd', False, None),  # used flamethrower
+])
+def test_item_consumption(file, actions, expected_holding, expected_item):
+    session = Base_Game(file, actions, None)
+    assert session.game_state['holding'] == expected_holding
+    assert session.player_held_item == expected_item
+
+@pytest.mark.parametrize("file, actions",[
+    ('map_debug.txt', 'ppppp'),  # multiple pickup attempts on empty tile
+    ('map_debug.txt', 'dpasp'),  # multiple pickups after getting item
+])
+def test_multiple_pickup_attempts(file, actions):
+    session = Base_Game(file, actions, None)
+    # should not crash, holding state should be consistent
+    assert isinstance(session.game_state['holding'], bool)
