@@ -200,6 +200,7 @@ https://github.com/user-attachments/assets/0a18b67c-18d9-4884-a941-688cf96321e6
 - Persistent Leaderboard!
 - Main Menu w/ map selection and leaderboard view!
 - Intro sequence with animation!
+- Exit at any input segment by entering **'Q'**
 
 
 ## 📁 Code Structure
