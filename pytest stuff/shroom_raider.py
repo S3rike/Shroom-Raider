@@ -134,9 +134,9 @@ class Game:
                     self.boulder_hidden_objects.pop((dest_row, dest_col))
                     self.modify_movement(dest_tile, dest_row, dest_col, curr_row, curr_col)
                 else:
-                    self.game_state['error'] = True
+                    pass
             else:
-                self.game_state['error'] = True
+                pass
         elif dest_tile == '~':
             self.latest_action = 'water'
             self.game_state['drowning'] = True

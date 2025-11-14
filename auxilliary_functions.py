@@ -114,7 +114,7 @@ def fetch_leaderboard(map_name):
     print(f"\n{'-'*60}")
 
     instruct_input("\nPress enter to return to menu...")
-    ...
+    return None
 
 def return_map_list():
     curr_directory = get_current_directory()
@@ -184,9 +184,9 @@ def check_movement(session, dest_row, dest_col, curr_row, curr_col): # dest mean
                 session.boulder_hidden_objects.pop((dest_row, dest_col))
                 modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col)
             else:
-                session.game_state['error'] = True
+                pass
         else:
-            session.game_state['error'] = True
+            pass
     elif dest_tile == '~':
         session.latest_action = 'water'
         session.game_state['drowning'] = True
