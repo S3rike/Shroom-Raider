@@ -226,6 +226,23 @@ class Game:
         else:
             return False        
 if __name__ == "__main__":
+    get_arguments = ArgumentParser()
+    get_arguments.add_argument('-f', '--stage_name', type = str, default = None)
+    get_arguments.add_argument('-m', '--move_actions', type = str, default = None)
+    get_arguments.add_argument('-o', '--output_file', type = str, default = None)
+    inputs = get_arguments.parse_args()
+
     while True:
         session = Game(choose_map())
         session.run_game()
+
+    if inputs.move_actions == None or inputs.output_file == None:
+        initial_file = inputs.stage_name
+        if initial_file == None:
+            initial_file = choose_map()
+        while True:
+            session = Game(initial_file)
+            session.run_game()
+            initial_file = choose_map()
+    else:
+        session = Base_Game(inputs.stage_name, inputs.move_actions, inputs.output_file)
