@@ -57,14 +57,6 @@ def test_boulder_to_boulder(file, actions, verdict):
     session = Base_Game(file, actions, None)
     assert session.run_game() == verdict
 
-@pytest.mark.parametrize("file, actions, verdict",[
-    ('map_debug.txt', 'wwdddd', 'NO CLEAR'),
-    ('map_debug.txt', 'wwddsdpdddwss', 'CLEAR'),
-])
-def test_boulder_to_boulder(file, actions, verdict):
-    session = Base_Game(file, actions, None)
-    assert session.run_game() == verdict
-
 # test item usage
 @pytest.mark.parametrize("file, actions, expected_holding, expected_item",[
     ('map_debug.txt', 'dpd', False, None),  # used axe
