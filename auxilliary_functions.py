@@ -44,30 +44,33 @@ def choose_map():
     curr_playing = play_sound('menu')
     bool_invalid_input = False
     while True:
-        clear_screen()
-        show_list_maps()
-        print(f'[R] To Refresh List       [Q] To Quit Game       [L] To Display Leaderboard')
-        if curr_playing == None: print(f"Audio Backend Not Available")
-        if bool_invalid_input: print(f"File Not found, Try Again")
-        map_name = instruct_input("Enter name of map or action: ")
-        if map_name.upper() == 'R':
-            bool_invalid_input = False
-            continue
-        elif map_name.upper() == 'Q':
-            exit_terminal()
-        elif map_name.upper() == 'L':
-            map_leaderboard_check = instruct_input("Which map would you like to view? ")
-            fetch_leaderboard(map_leaderboard_check)
-            continue
-        else:
-            file_name = f"maps/{map_name}.txt"
-            if check_existing_file(file_name):
-                stop_sound(curr_playing)
-                clear_screen()
-                return map_name        
+        try:
+            clear_screen()
+            show_list_maps()
+            print(f'[R] To Refresh List       [Q] To Quit Game       [L] To Display Leaderboard')
+            if curr_playing == None: print(f"Audio Backend Not Available")
+            if bool_invalid_input: print(f"File Not found, Try Again")
+            map_name = instruct_input("Enter name of map or action: ")
+            if map_name.upper() == 'R':
+                bool_invalid_input = False
+                continue
+            elif map_name.upper() == 'Q':
+                exit_terminal()
+            elif map_name.upper() == 'L':
+                map_leaderboard_check = instruct_input("Which map would you like to view? ")
+                fetch_leaderboard(map_leaderboard_check)
+                continue
             else:
-                bool_invalid_input = True
-
+                file_name = f"maps/{map_name}.txt"
+                if check_existing_file(file_name):
+                    stop_sound(curr_playing)
+                    clear_screen()
+                    return map_name        
+                else:
+                    bool_invalid_input = True
+        except:
+            pass
+# Display Leaderboard
 def fetch_leaderboard(map_name):
     clear_screen()
     leaderboard_file = f"saved_states/{map_name[0::2]}{map_name[1::2]}_leaderboard.txt"
@@ -316,11 +319,7 @@ def clear_screen():
         os_command("clear")
 
 def instruct_input(input_text):
-    while True:
-        try:
-            return input(input_text)
-        except:
-            pass
+    return input(input_text)
 
 def get_operating_system():
     return os.name
