@@ -205,6 +205,13 @@ The project is organised into three main files:
 - auxilliary_functions.py - Contains helper functions for gameplay mechanics, display, and other system operations
 - assets folder - Contains game assets such as tile definitions
 
+**Algorithm Design**
+Game loop -> Initialize game → Load map → While not game over: Display map → Get player input → Process actions → Check win/lose conditions
+
+The movement system follows this logic:
+1. Calculate destination coordinates based on movement
+2. Check what happens when you move onto the tile, like pushing a rock, picking up a mushroom, or running into a tree and nothing changes. Or just dying.
+
 
 
 Here is a **visual rendition** of the file structure!
