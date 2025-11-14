@@ -18,8 +18,8 @@ class Game:
         self.restart_game = True
         self.latest_action = None
         self.start_time = None
+        self.pause_time = None # for save_states
         self.end_time = None
-        self.completion_time = None
     # Basically int(main) 
     def run_game(self):
         self.initial_session()
@@ -36,7 +36,7 @@ class Game:
         save_file = get_joint_path(folder,f'{self.file_name[0::2]}{self.file_name[1::2]}.txt')
         bool_check = False
         if check_existing_file(save_file.strip()):
-            bool_check = self.get_bool_input(f'Save File Detected.\nRun Save [Y/N]:')
+            bool_check = self.get_bool_input(f'Save File Detected.\nRun Save [Y/N]: ')
         try:
             if bool_check:
                 self.fetch_save()
@@ -48,6 +48,7 @@ class Game:
     # Loads Base Map File
     def fetch_map(self):
         self.start_time = time.time()
+        self.pause_time = 0
         self.map = list()
         self.boulder_hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
@@ -78,6 +79,9 @@ class Game:
         except FileNotFoundError:
             create_directory("saved_states")
             file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}.txt", 'w')
+        elapsed_time = 0
+        if self.start_time:
+            elasped_time = time.time() - self.start_time - self.pause_time
         file.write(f"{self.map_rows} {self.map_cols}\n")
         file.write(f"{self.player_coords['row']} {self.player_coords['col']}\n")
         file.write(f"{self.player_held_item} {self.player_hidden_object}\n")
@@ -85,6 +89,7 @@ class Game:
         file.write(f"{int(self.game_state['holding'])} {int(self.game_state['drowning'])}\n")
         file.write(f"{int(self.game_state['lost'])} {0}\n")
         file.write(f"{int(self.restart_game)}\n")
+        file.write(f"{elapsed_time}\n")
         for tile_line in self.map[:-1]:
             row = tile_line[0]
             for char in tile_line[1:-1]:
@@ -103,8 +108,10 @@ class Game:
             file.write(f'{x} {y} {char}\n')
         file.close()
         return None
+    
     # Loads Saved State
     def fetch_save(self):
+        saved_elapsed_time = 0
         self.map = list()
         self.boulder_hidden_objects = dict()
         file = open(f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}.txt", 'rt')
@@ -123,12 +130,21 @@ class Game:
                 self.game_state['lost'], self.game_state['error'] = map(int, line.strip().split(" "))
             elif row == 6:
                 self.restart_game = bool(line.strip())
-            elif 7 <= row <= self.map_rows + 6:
+            elif row == 7:
+                try:
+                    saved_elapsed_time = float(line.strio())
+                except ValueError:
+                    saved_elapsed_time = 0
+            elif 7 <= row <= self.map_rows + 7:
                 self.map.append(list(line.split(" ")))
             else:
                 x, y, char = line.strip().split(' ')
                 self.boulder_hidden_objects.update({(int(x),int(y)): char})
         file.close()
+
+        self.start_time = time.time() # reset timer after fetching save
+        self.pause_time = -saved_elapsed_time # negative so subtracted at final calculation
+
         return None
     
     # The actual int(main) but runs for each move of the user
@@ -144,7 +160,7 @@ class Game:
         clear_screen()
         show_entire_map(self)
         if self.start_time:
-            elapsed = time.time() - self.start_time
+            elapsed = time.time() - self.start_time - self.pause_time
             mins = int(elapsed // 60)
             seconds = int(elapsed % 60)
             print(f'Time Elapsed: {mins:02d}:{seconds:02d}\n')
@@ -201,15 +217,13 @@ class Game:
         return None
     # Shows Possible Ending Game States
     def show_result(self):
-        self.end_time = time.time()
-        self.completion_time = self.end_time - self.start_time
-        mins_taken = int(self.completion_time // 60)
-        seconds_taken = int(self.completion_time % 60)
-        # self.save_leaderboard() # to implement
+        completion_time = time.time() - self.start_time - self.pause_time
+        mins_taken = int(completion_time // 60)
+        seconds_taken = int(completion_time % 60)
         self.save_game()
         if self.mushroom_count['total'] == self.mushroom_count['collected']:
             clear_screen()
-            show_stage_clear(self.map, self.mushroom_count, mins_taken, seconds_taken)
+            show_stage_clear(self, mins_taken, seconds_taken, completion_time)
         elif self.game_state['drowning']:
             clear_screen()
             show_game_over(self.map, self.mushroom_count, mins_taken, seconds_taken)

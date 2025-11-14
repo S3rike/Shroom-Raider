@@ -1,0 +1,14 @@
+5 9
+1 5
+None .
+3 3
+0 0
+0 0
+1
+0
+T T T T T T T T T 
+T . . T . L . . T 
+T . x T . . . . T 
+T * . . . . R ~ T 
+T T T T T T T T T 
+3 6 .

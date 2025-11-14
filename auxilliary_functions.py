@@ -17,7 +17,18 @@ def stop_sound(curr_playing):
         curr_playing.stop()
     return None
 
-def save_leaderboard(self):
+def save_to_leaderboard(self, name_input, completion_time):
+    leaderboard_file = f"saved_states/{self.file_name[0::2]}{self.file_name[1::2]}_leaderboard.txt"
+    time_of_save = time.strftime("%d - %b - %Y %H:%M")
+    converted_hours = int(completion_time // 3600)
+    converted_mins = int(completion_time % 3600)
+    convered_seconds = completion_time % 60
+    if converted_hours > 0:
+        converted_completion_time = f"{converted_hours}:{converted_mins:02d}:{convered_seconds:05.2f}"
+    else:
+        converted_completion_time = f"{converted_mins}:{convered_seconds:05.2f}"
+    with open(leaderboard_file, 'a') as f:
+        f.write(f'{name_input} | {converted_completion_time} | {time_of_save}\n')
     ...
 
 # Functions For User Choosing Maps
@@ -170,8 +181,10 @@ def modify_movement(session, dest_tile, dest_row, dest_col, curr_row, curr_col):
     session.map[dest_row][dest_col] = 'L'
     session.player_coords['row'] = dest_row
     session.player_coords['col'] = dest_col
+
 def pos_in_bounds(total_row, total_col, row, col):
     return (0 <= row < total_row) and (0 <= col < total_col)
+
 def new_pos(action, player_row, player_col):
     dest_row, dest_col = player_row, player_col
     if action == 'W':
@@ -207,7 +220,7 @@ def show_game_over(map, mushroom_count, mins_taken, seconds_taken):
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
 
-def show_stage_clear(map, mushroom_count, mins_taken, seconds_taken):
+def show_stage_clear(self, mins_taken, seconds_taken, completion_time):
     play_sound('win')
     clear_screen()
     column = get_terminal_col_size()
@@ -215,42 +228,54 @@ def show_stage_clear(map, mushroom_count, mins_taken, seconds_taken):
     display_stage_clear = stage_clear_screen.splitlines()
     for line in display_stage_clear:
         print(line.center(column))
-    print(f'You collected all {mushroom_count['total']} mushrooms!\n')
+    print(f'You collected all {self.mushroom_count['total']} mushrooms!\n')
     print(f'You played for {mins_taken} minutes and {seconds_taken} seconds.')
-    for row in map:
+    for row in self.map:
         emoji_display = [tile_ui.get(tile, tile) for tile in row]
         print(''.join(emoji_display))
+    name_input = instruct_input("Enter name for leaderboard: ")
+    save_to_leaderboard(self, name_input, completion_time)
+
 # System Commands
 def exit_terminal():
     clear_screen()
     return sys.exit()
+
 def clear_screen():
     if get_operating_system() == "nt":
         os_command("cls")
     else:
         os_command("clear")
+
 def instruct_input(input_text):
     while True:
         try:
             return input(input_text)
         except:
             pass
+
 def get_operating_system():
     return os.name
+
 def get_current_directory():
     return os.getcwd()
+
 def create_directory(name):
     os.mkdir(name)
     return None
+
 def get_joint_path(*paths):
     file = ""
     for line in paths:
         file = os.path.join(file, line)
     return file
+
 def check_existing_file(file_name):
     return os.path.exists(file_name)
+
 def get_terminal_col_size():
     return os.get_terminal_size()[0]
+
 def os_command(command):
     return os.system(command)
 
