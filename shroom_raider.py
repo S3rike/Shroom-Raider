@@ -1,5 +1,6 @@
 # Import functions to be used
 from auxilliary_functions import *
+from pytest_stuff.shroom_raider import *
 
 class Game:
     # Initializations
@@ -14,9 +15,6 @@ class Game:
         self.player_hidden_object = '.'
         self.boulder_hidden_objects = dict()
         self.mushroom_count = {'total': 0, 'collected': 0}
-        # For Argument Parsing
-        self.move_inputs = 
-        self.output_file = 
         # Game States And Note-Taking
         self.game_state = {'holding':False, 'drowning':False, 'lost':False, 'error':False}
         self.debug = None
@@ -280,16 +278,18 @@ def menu():
     
 if __name__ == "__main__":
     get_arguments = ArgumentParser()
-    get_arguments.add_argument('-f', '--stage_name', type = str)
+    get_arguments.add_argument('-f', '--stage_name', type = str, default = None)
     get_arguments.add_argument('-m', '--move_actions', type = str, default = None)
-    get_arguments.add_argument('-o', '--output_file', type = str, default=None)
+    get_arguments.add_argument('-o', '--output_file', type = str, default = None)
     inputs = get_arguments.parse_args()
 
     if inputs.move_actions == None or inputs.output_file == None:
-        session = Game(choos)
-    # display_intro()
-    while True:
-        menu()
-        session = Game(choose_map())
-        session.run_game()
-    ...
+        session = Base_Game(inputs.stage_name, inputs.move_actions, inputs.output_file)
+    else:
+        if inputs.output_file == None:
+            initial_file = choose_map()
+        while True:
+            menu()
+            session = Game(initial_file)
+            session.run_game()
+            initial_file = choose_map()
