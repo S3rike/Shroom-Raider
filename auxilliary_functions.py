@@ -3,6 +3,7 @@ from assets.final_state import *
 from assets.tile_tags import *
 from assets.sound_paths import *
 from assets.screen_display_text import *
+from argparse import ArgumentParser
 from playsound3 import playsound
 from rich.console import Console
 from rich.text import Text

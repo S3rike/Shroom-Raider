@@ -7,7 +7,7 @@ immovable_tiles = {'T', '~'} # Set of tiles that cannot be moved into
 adjustable_tiles = {'R'}
 tile_ui = {'L':'🧑', '.':'　', 'T':'🌲', '+':'🍄', 'R':'🪨', '~':'🟦', '-':'⬜', 'x':'🪓', '*':'🔥'}
 
-class Game:
+class Base_Game:
     def __init__(self, file_name, input_move, output_file):
         self.file_name = file_name
         self.actions = input_move
@@ -238,5 +238,5 @@ if __name__ == "__main__":
     get_arguments.add_argument('-o', '--output_file', type = str, default=None)
     inputs = get_arguments.parse_args()
 
-    session = Game(inputs.stage_name, inputs.move_actions, inputs.output_file)
+    session = Base_Game(inputs.stage_name, inputs.move_actions, inputs.output_file)
     session.run_game()
