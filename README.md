@@ -201,9 +201,9 @@ For more information regarding the additional features, check the bonus features
 ## 📁 Code Structure
 
 The project is organised into three main files:
-shroom_raider.py - Contains the Game class and the main game logic
-auxilliary_functions.py - Contains helper functions for gameplay mechanics, display, and other system operations
-assets folder - Contains game assets such as tile definitions
+- shroom_raider.py - Contains the Game class and the main game logic
+- auxilliary_functions.py - Contains helper functions for gameplay mechanics, display, and other system operations
+- assets folder - Contains game assets such as tile definitions
 
 
 
