@@ -317,17 +317,17 @@ def typewriter_effect(list_text):
             console.print(char, end="")
             sys.stdout.flush()
             if num % 2 == 0:
-                time.sleep(0.15)
+                time.sleep(0.2)
             else:
-                time.sleep(0.1)
+                time.sleep(0.15)
         print()
-        time.sleep(2.5)
+        time.sleep(3)
 
 def display_intro():
     typewriter_effect(INTRO_QUOTES)
     os_command('cls' if get_operating_system() == 'nt' else 'clear')
     console.print(SHROOM_RAIDER_SIGN, style="red", justify="center")
-    time.sleep(2)
+    time.sleep(4.5)
 
 # What Will Happen If User Runs This File
 def error():
