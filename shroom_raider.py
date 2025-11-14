@@ -281,7 +281,8 @@ if __name__ == "__main__":
     inputs = get_arguments.parse_args()
 
     if inputs.move_actions == None or inputs.output_file == None:
-        if inputs.stage_name == None:
+        initial_file = inputs.stage_name
+        if initial_file == None:
             initial_file = choose_map()
         while True:
             session = Game(initial_file)
