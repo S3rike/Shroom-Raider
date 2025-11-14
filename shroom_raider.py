@@ -262,7 +262,6 @@ class Game:
         else:
             pass
         return user_input
-    
     def get_bool_input(self, instruct):
         while True:
             if self.game_state['error']:
