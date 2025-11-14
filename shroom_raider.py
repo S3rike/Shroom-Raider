@@ -20,6 +20,7 @@ class Game:
         self.start_time = None
         self.end_time = None
         self.completion_time = None
+
     # Basically int(main) 
     def run_game(self):
         self.initial_session()
@@ -45,6 +46,7 @@ class Game:
         except:
             self.debug = f'Save File Is Corrupted. Loading Base Map'
             self.fetch_map()
+
     # Loads Base Map File
     def fetch_map(self):
         self.start_time = time.time()
@@ -71,6 +73,7 @@ class Game:
         self.map_rows = len(self.map)
         self.map_cols = len(self.map[0]) - 1
         return None
+    
     # Saves Game State To A txt File
     def save_game(self):
         try:
@@ -103,6 +106,7 @@ class Game:
             file.write(f'{x} {y} {char}\n')
         file.close()
         return None
+    
     # Loads Saved State
     def fetch_save(self):
         self.map = list()
@@ -158,6 +162,7 @@ class Game:
         print("\nMove Up: [W]\nMove Left: [A]\nMove Down: [S]\nMove Right: [D]")
         print(f"\nTo Reset: [!]  To Quit: [Q]  To Save: [F]")
         return None
+    
     # Validates and Runs User Inputs
     def player_input(self):
         if check_game_over(self): # Only occurs during backup of a finished session
@@ -199,6 +204,7 @@ class Game:
         if self.latest_action and not check_game_over(self):
             play_sound(self.latest_action)
         return None
+    
     # Shows Possible Ending Game States
     def show_result(self):
         self.end_time = time.time()
@@ -228,6 +234,7 @@ class Game:
         else:
             pass
         return user_input
+    
     def get_bool_input(self, instruct):
         while True:
             if self.game_state['error']:
@@ -245,10 +252,13 @@ class Game:
         if bool_check:
             return True
         else:
-            return False         
+            return False      
+           
 def menu():
     ...
+    
 if __name__ == "__main__":
+    display_intro()
     while True:
         menu()
         session = Game(choose_map())
