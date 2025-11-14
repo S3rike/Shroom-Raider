@@ -1,4 +1,5 @@
-playsound3
+playsound3==3.3.0
 rich==14.2.0
 wcwidth==0.2.14
 textual==6.6.0
+playtest==9.0.1
