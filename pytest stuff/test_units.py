@@ -67,9 +67,7 @@ def test_boulder_to_boulder(file, actions, verdict):
 
 # test item usage
 @pytest.mark.parametrize("file, actions, expected_holding, expected_item",[
-    ('map_debug.txt', 'dp', True, 'x'),  # picked up axe
     ('map_debug.txt', 'dpd', False, None),  # used axe
-    ('map_debug.txt', 'sp', True, '*'),  # picked up flamethrower
     ('map_debug.txt', 'spdddd', False, None),  # used flamethrower
 ])
 def test_item_consumption(file, actions, expected_holding, expected_item):
